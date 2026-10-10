@@ -1,0 +1,480 @@
+// Festoon — celebration concierge & Party-in-a-Box
+// Money is stored as integer minor units (paise). PII columns ending in `Enc`
+// hold AES-256-GCM ciphertext; `*Hash` columns are HMAC lookups (see src/lib/crypto.ts).
+// Row Level Security policies live in prisma/sql/rls.sql and are applied after migrate.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────── Identity ───────────────────────────
+
+enum Role {
+  CUSTOMER
+  STAFF
+  DECORATOR
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  role          Role      @default(CUSTOMER)
+  displayName   String?
+  emailHash     String?   @unique
+  emailEnc      String?
+  phoneHash     String?   @unique
+  phoneEnc      String?
+  totpSecretEnc String?
+  totpEnabledAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions      Session[]
+  addresses     Address[]
+  customBoxes   CustomBox[]
+  orders        Order[]
+  contributions SplitContribution[]
+  assignments   DecorBooking[]      @relation("DecoratorAssignments")
+  auditLogs     AuditLog[]
+}
+
+model Session {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Second factor that satisfied this session: "otp", "totp", or "otp+totp".
+  factors    String
+  userAgent  String?
+  ipHash     String?
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime
+  revokedAt  DateTime?
+
+  @@index([userId])
+}
+
+enum OtpChannel {
+  SMS
+  WHATSAPP
+  EMAIL
+}
+
+model OtpChallenge {
+  id             String     @id @default(cuid())
+  identifierHash String
+  channel        OtpChannel
+  codeHash       String
+  attempts       Int        @default(0)
+  expiresAt      DateTime
+  consumedAt     DateTime?
+  ipHash         String?
+  createdAt      DateTime   @default(now())
+
+  @@index([identifierHash, createdAt])
+}
+
+model Address {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label       String   @default("Home")
+  // Full address line, landmark and recipient phone, encrypted as one JSON blob.
+  payloadEnc  String
+  pincode     String
+  lat         Float?
+  lng         Float?
+  createdAt   DateTime @default(now())
+  orders      Order[]
+
+  @@index([userId])
+}
+
+// ─────────────────────────── Catalog ───────────────────────────
+
+enum ItemCategory {
+  SLEEVE
+  SNACK
+  CAKE
+  CONFECTIONERY
+  FAVOR
+  RIBBON
+}
+
+model CatalogItem {
+  id           String       @id // stable slug, e.g. "snack-masala-makhana"
+  category     ItemCategory
+  name         String
+  description  String?
+  pricePaise   Int
+  eggless      Boolean      @default(true)
+  vegan        Boolean      @default(false)
+  glutenFree   Boolean      @default(false)
+  containsNuts Boolean      @default(false)
+  active       Boolean      @default(true)
+  meta         Json?        // colour swatches, 3D model hints, etc.
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  inventory    InventoryItem?
+  recipeItems  BoxRecipeItem[]
+  customItems  CustomBoxItem[]
+
+  @@index([category, active])
+}
+
+/// Curated, merchandised box templates ("The Little Legends Box").
+model BoxRecipe {
+  id          String          @id @default(cuid())
+  slug        String          @unique
+  name        String
+  tagline     String?
+  audience    AgeGroup?
+  heroImage   String?
+  published   Boolean         @default(false)
+  items       BoxRecipeItem[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model BoxRecipeItem {
+  recipeId  String
+  recipe    BoxRecipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  itemId    String
+  item      CatalogItem @relation(fields: [itemId], references: [id])
+  quantity  Int         @default(1)
+
+  @@id([recipeId, itemId])
+}
+
+/// A customer's saved configuration from the Build-Your-Box studio.
+model CustomBox {
+  id          String          @id @default(cuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  sleeveId    String
+  ribbonText  String?         @db.VarChar(28)
+  fromRecipe  String?
+  items       CustomBoxItem[]
+  orderLines  OrderLine[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([userId])
+}
+
+model CustomBoxItem {
+  customBoxId String
+  customBox   CustomBox   @relation(fields: [customBoxId], references: [id], onDelete: Cascade)
+  itemId      String
+  item        CatalogItem @relation(fields: [itemId], references: [id])
+  quantity    Int         @default(1)
+
+  @@id([customBoxId, itemId])
+}
+
+// ─────────────────────────── Inventory ───────────────────────────
+
+model InventoryItem {
+  id            String   @id @default(cuid())
+  catalogItemId String?  @unique
+  catalogItem   CatalogItem? @relation(fields: [catalogItemId], references: [id])
+  decorAssetId  String?  @unique
+  decorAsset    DecorAsset?  @relation(fields: [decorAssetId], references: [id])
+  sku           String   @unique
+  onHand        Int      @default(0)
+  reserved      Int      @default(0)
+  reorderAt     Int      @default(20)
+  seasonal      Boolean  @default(false)
+  updatedAt     DateTime @updatedAt
+
+  zoneStock     ZoneStock[]
+  movements     InventoryMovement[]
+}
+
+model InventoryMovement {
+  id          String        @id @default(cuid())
+  inventoryId String
+  inventory   InventoryItem @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  delta       Int
+  reason      String        // "order:<id>", "restock", "damage", "manual"
+  actorId     String?
+  createdAt   DateTime      @default(now())
+
+  @@index([inventoryId, createdAt])
+}
+
+/// Dark-store / kitchen hubs that can fulfil SOS express orders inside a radius.
+model ServiceZone {
+  id          String      @id @default(cuid())
+  name        String
+  hubLat      Float
+  hubLng      Float
+  radiusKm    Float       @default(8)
+  pincodes    String[]
+  sosEnabled  Boolean     @default(true)
+  opensAt     Int         @default(9)  // hour, local time
+  closesAt    Int         @default(22)
+  stock       ZoneStock[]
+  orders      Order[]
+}
+
+model ZoneStock {
+  zoneId      String
+  zone        ServiceZone   @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  inventoryId String
+  inventory   InventoryItem @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  available   Int
+
+  @@id([zoneId, inventoryId])
+}
+
+// ─────────────────────────── Orders & payments ───────────────────────────
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  NEW
+  PACKING
+  DISPATCHED
+  DELIVERED
+  EVENT_COMPLETED
+  CANCELLED
+}
+
+enum OrderChannel {
+  WEB
+  WHATSAPP
+  CONCIERGE_CALL
+  SOS_EXPRESS
+}
+
+enum PaymentPlan {
+  FULL
+  DEPOSIT // advance now, balance on delivery
+  SPLIT   // group gifting link
+}
+
+enum AgeGroup {
+  KIDS
+  TEENS
+  ADULTS
+  MIXED
+}
+
+model Order {
+  id              String       @id @default(cuid())
+  reference       String       @unique // human-friendly, e.g. FST-7K2Q9M
+  idempotencyKey  String?      @unique
+  userId          String
+  user            User         @relation(fields: [userId], references: [id])
+  status          OrderStatus  @default(PENDING_PAYMENT)
+  channel         OrderChannel @default(WEB)
+  paymentPlan     PaymentPlan  @default(FULL)
+  priority        Int          @default(0) // SOS express jumps the packing queue
+  addressId       String?
+  address         Address?     @relation(fields: [addressId], references: [id])
+  zoneId          String?
+  zone            ServiceZone? @relation(fields: [zoneId], references: [id])
+  eventDate       DateTime
+  slotStart       DateTime
+  slotEnd         DateTime
+  guestCount      Int
+  ageGroup        AgeGroup     @default(MIXED)
+  theme           String?
+  notesEnc        String?
+  subtotalPaise   Int
+  discountPaise   Int          @default(0)
+  expressFeePaise Int          @default(0)
+  taxPaise        Int
+  totalPaise      Int
+  depositPaise    Int          @default(0)
+  paidPaise       Int          @default(0)
+  currency        String       @default("INR")
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  lines           OrderLine[]
+  payments        Payment[]
+  events          OrderEvent[]
+  decorBookings   DecorBooking[]
+  splitLink       SplitPayLink?
+
+  @@index([userId, createdAt])
+  @@index([status, priority, slotStart])
+}
+
+model OrderLine {
+  id             String     @id @default(cuid())
+  orderId        String
+  order          Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  kind           String     // "box" | "decor" | "addon"
+  label          String
+  customBoxId    String?
+  customBox      CustomBox? @relation(fields: [customBoxId], references: [id])
+  // Frozen snapshot of the box spec at purchase time (sleeve, ribbon, item ids).
+  spec           Json
+  quantity       Int
+  unitPricePaise Int
+  linePaise      Int
+}
+
+model OrderEvent {
+  id        String       @id @default(cuid())
+  orderId   String
+  order     Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  from      OrderStatus?
+  to        OrderStatus
+  actorId   String?
+  note      String?
+  createdAt DateTime     @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+enum PaymentProvider {
+  RAZORPAY
+  STRIPE
+  CASH_ON_DELIVERY
+}
+
+enum PaymentStatus {
+  CREATED
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id             String          @id @default(cuid())
+  orderId        String
+  order          Order           @relation(fields: [orderId], references: [id])
+  provider       PaymentProvider
+  providerRef    String          @unique // razorpay order_id / stripe payment_intent id
+  purpose        String          // "full" | "deposit" | "balance" | "split"
+  amountPaise    Int
+  status         PaymentStatus   @default(CREATED)
+  contributionId String?         @unique
+  contribution   SplitContribution? @relation(fields: [contributionId], references: [id])
+  raw            Json?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([orderId])
+}
+
+// ─────────────────────────── Group gifting / split-pay ───────────────────────────
+
+model SplitPayLink {
+  id           String              @id @default(cuid())
+  orderId      String              @unique
+  order        Order               @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  // Only the SHA-256 of the URL token is stored; the raw token lives in the link.
+  tokenHash    String              @unique
+  targetPaise  Int
+  raisedPaise  Int                 @default(0)
+  suggestedShares Int              @default(4)
+  message      String?             @db.VarChar(280)
+  expiresAt    DateTime
+  closedAt     DateTime?
+  contributions SplitContribution[]
+  createdAt    DateTime            @default(now())
+}
+
+model SplitContribution {
+  id          String       @id @default(cuid())
+  linkId      String
+  link        SplitPayLink @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?        @relation(fields: [userId], references: [id])
+  displayName String       @db.VarChar(60)
+  note        String?      @db.VarChar(140)
+  amountPaise Int
+  paid        Boolean      @default(false)
+  payment     Payment?
+  createdAt   DateTime     @default(now())
+
+  @@index([linkId])
+}
+
+// ─────────────────────────── Decor ───────────────────────────
+
+model DecorKit {
+  id           String         @id // "balloon-arch", "neon-backdrop", "boho-tabletop"
+  name         String
+  description  String
+  pricePaise   Int
+  setupMinutes Int
+  footprintW   Float          // metres
+  footprintD   Float
+  footprintH   Float
+  active       Boolean        @default(true)
+  assets       DecorKitAsset[]
+  bookings     DecorBooking[]
+}
+
+model DecorAsset {
+  id         String          @id @default(cuid())
+  name       String
+  reusable   Boolean         @default(true)
+  kits       DecorKitAsset[]
+  inventory  InventoryItem?
+}
+
+model DecorKitAsset {
+  kitId    String
+  kit      DecorKit   @relation(fields: [kitId], references: [id], onDelete: Cascade)
+  assetId  String
+  asset    DecorAsset @relation(fields: [assetId], references: [id])
+  quantity Int
+
+  @@id([kitId, assetId])
+}
+
+enum DecorStatus {
+  REQUESTED
+  CONFIRMED
+  ASSIGNED
+  EN_ROUTE
+  INSTALLED
+  STRUCK // taken down
+  CANCELLED
+}
+
+model DecorBooking {
+  id            String      @id @default(cuid())
+  orderId       String
+  order         Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  kitId         String
+  kit           DecorKit    @relation(fields: [kitId], references: [id])
+  status        DecorStatus @default(REQUESTED)
+  decoratorId   String?
+  decorator     User?       @relation("DecoratorAssignments", fields: [decoratorId], references: [id])
+  installStart  DateTime
+  installEnd    DateTime
+  routeOrder    Int?        // stop index on the decorator's route for the day
+  palette       String?
+  createdAt     DateTime    @default(now())
+
+  @@index([decoratorId, installStart])
+}
+
+// ─────────────────────────── Audit ───────────────────────────
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id])
+  action    String
+  target    String?
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([actorId, createdAt])
+}
