@@ -13,13 +13,13 @@ export const SOS_KITS: readonly SosKit[] = [
   {
     id: "rescue-10",
     name: "Rescue 10",
-    pitch: "Ten snack boxes, cake tier and favors. The forgot-it-was-today kit.",
+    pitch: "Ten snack boxes: chips, samosa, jam bun, cake and a return gift. The forgot-it-was-today kit.",
     boxes: 10,
     spec: {
-      sleeveId: "sleeve-coral-pop",
+      sleeveId: "sleeve-red",
       ribbonId: "ribbon-gold-satin",
       ribbonText: "",
-      items: { "snack-caramel-popcorn": 1, "snack-nachos-salsa": 1, "cake-red-velvet": 1, "conf-chocolate-coins": 1, "favor-glow-sticks": 1 },
+      items: { "snack-salted-chips": 1, "snack-samosa": 1, "snack-jam-bun": 1, "cake-plain-vanilla": 1, "conf-eclairs": 1, "favor-glow-sticks": 1 },
     },
   },
   {
@@ -28,22 +28,22 @@ export const SOS_KITS: readonly SosKit[] = [
     pitch: "A whole class or office floor, sorted inside 90 minutes.",
     boxes: 25,
     spec: {
-      sleeveId: "sleeve-midnight-foil",
+      sleeveId: "sleeve-blue",
       ribbonId: "ribbon-gold-satin",
       ribbonText: "",
-      items: { "snack-masala-makhana": 1, "snack-nachos-salsa": 1, "cake-belgian-chocolate": 1, "conf-vegan-gummies": 1, "favor-bubble-wand": 1 },
+      items: { "snack-peri-peri-chips": 1, "snack-veg-puff": 1, "snack-cream-bun-vanilla": 1, "cake-plain-chocolate": 1, "conf-chocolate-bar": 1, "favor-colouring-kit": 1 },
     },
   },
   {
     id: "midnight-drop",
     name: "Midnight Cake Drop",
-    pitch: "Six tiers, sparklers-ready, gold coins. For the 11:58 pm surprise.",
+    pitch: "Six cake slices, Mysore pak and kaju katli. For the 11:58 pm surprise.",
     boxes: 6,
     spec: {
-      sleeveId: "sleeve-champagne-pleat",
+      sleeveId: "sleeve-black",
       ribbonId: "ribbon-gold-satin",
       ribbonText: "",
-      items: { "snack-trail-mix": 1, "cake-belgian-chocolate": 1, "conf-kaju-katli": 1 },
+      items: { "snack-banana-chips": 1, "cake-honey": 1, "conf-mysore-pak": 1, "conf-kaju-katli": 1 },
     },
   },
 ];

@@ -26,7 +26,7 @@ export function FinishPicker({ value, onChange }: { value: SleeveFinish; onChang
     >
       <div
         role="radiogroup"
-        aria-label="Box sleeve"
+        aria-label="Box colour"
         className="flex items-center gap-3 rounded-full border border-ink/12 bg-ivory/85 py-2 pr-4 pl-2 shadow-[0_20px_50px_-20px_rgba(60,42,18,0.28)] backdrop-blur-xl"
       >
         <div className="flex items-center gap-1.5">
@@ -59,7 +59,7 @@ export function FinishPicker({ value, onChange }: { value: SleeveFinish; onChang
           })}
         </div>
         <div className="min-w-[7.5rem] leading-tight">
-          <p className="font-sub text-[10px] font-semibold tracking-[0.22em] text-mist-faint uppercase">Sleeve</p>
+          <p className="font-sub text-[10px] font-semibold tracking-[0.22em] text-mist-faint uppercase">Box colour</p>
           <motion.p key={value} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="font-display text-sm font-semibold text-mist">
             {FINISHES[value].name}
           </motion.p>

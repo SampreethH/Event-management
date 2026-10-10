@@ -22,7 +22,7 @@ const FEATURES: Feature[] = [
   {
     href: "/build",
     title: "Build Your Box in 3D",
-    body: "Pick the sleeve, print your message, choose snacks and cake tiers. Watch it assemble, with live dietary checks.",
+    body: "Pick a box colour, print your message, then fill it with chips, samosa, cake and sweets. Watch it assemble, with live dietary checks.",
     Icon: Boxes,
     accent: "text-celebration-gold bg-celebration-gold/10",
     glow: "rgba(138,100,39,0.16)",
@@ -58,8 +58,8 @@ const FEATURES: Feature[] = [
   },
   {
     href: "/build#favors",
-    title: "Premium Return Gifts",
-    body: "Seed-paper confetti cards, soy candles, giant bubble wands and personalised totes, packed in every box.",
+    title: "Return Gifts",
+    body: "Channapatna wooden toys, stationery kits, steel bottles and seed pencils. Tuck one in a snack box, or order a gifts-only box.",
     Icon: Gift,
     accent: "text-celebration-gold bg-celebration-gold/10",
     glow: "rgba(138,100,39,0.14)",

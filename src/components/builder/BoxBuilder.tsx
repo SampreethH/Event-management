@@ -1,12 +1,12 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, MessageCircle, ShoppingBag, Sparkles } from "lucide-react";
+import { Check, Gift, MessageCircle, Popcorn, ShoppingBag, Sparkles } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/cn";
-import { BOX_RULES, CATALOG_BY_ID, RIBBON_TEXT_MAX, byCategory, type Category } from "@/lib/domain/catalog";
+import { BOX_RULES, CATALOG_BY_ID, RIBBON_TEXT_MAX, byCategory, type BoxKind, type Category } from "@/lib/domain/catalog";
 import { BULK_TIERS, boxSpecSchema, dietaryBadges, quoteBox, ribbonTextSchema } from "@/lib/domain/box";
 import { formatPaise } from "@/lib/domain/money";
 import { quoteOrder } from "@/lib/booking/quote";
@@ -26,16 +26,26 @@ const LuxuryPartyBox = dynamic(() => import("@/components/three/LuxuryPartyBox")
   loading: () => <div className="aspect-square w-full animate-pulse bg-ink/[0.03] sm:aspect-[5/4]" />,
 });
 
-const STEPS: { category: Exclude<Category, "sleeve" | "ribbon">; title: string; hint: string }[] = [
-  { category: "snack", title: "Snacks", hint: "Pick up to 4" },
-  { category: "cake", title: "Cake tier", hint: "Optional, one per box" },
-  { category: "confectionery", title: "Confectionery", hint: "Up to 2" },
-  { category: "favor", title: "Return gifts", hint: "Up to 2" },
+type Step = { category: Exclude<Category, "sleeve" | "ribbon">; title: string; hint: string };
+
+const STEPS: Record<BoxKind, Step[]> = {
+  snack: [
+    { category: "snack", title: "Snacks", hint: "Pick up to 6" },
+    { category: "cake", title: "Cake", hint: "Optional, one slice" },
+    { category: "confectionery", title: "Sweets & chocolates", hint: "Up to 3" },
+    { category: "favor", title: "Add a return gift", hint: "Optional, up to 2" },
+  ],
+  gift: [{ category: "favor", title: "Return gifts", hint: "Pick 1 to 3" }],
+};
+
+const KINDS: { kind: BoxKind; title: string; blurb: string; icon: typeof Gift }[] = [
+  { kind: "snack", title: "Snack box", blurb: "Snacks, cake and sweets", icon: Popcorn },
+  { kind: "gift", title: "Return gift box", blurb: "Gifts only, no food", icon: Gift },
 ];
 
 export function BoxBuilder() {
   const router = useRouter();
-  const { spec, quantity, notice, setSleeve, setRibbon, setRibbonText, toggleItem, setQuantity } = useBoxBuilder();
+  const { spec, kind, quantity, notice, setKind, setSleeve, setRibbon, setRibbonText, toggleItem, setQuantity } = useBoxBuilder();
   const addToCart = useCart((s) => s.add);
   const [status, setStatus] = useState<{ tone: "ok" | "warn"; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
@@ -46,7 +56,8 @@ export function BoxBuilder() {
   const badges = useMemo(() => dietaryBadges(spec), [spec]);
   const quote = useMemo(() => quoteBox(spec, quantity), [spec, quantity]);
   const previewItems = useMemo(() => toPreviewItems(spec), [spec]);
-  const label = spec.ribbonText.trim() ? "Custom box" : `${sleeve.name} box`;
+  const noun = kind === "gift" ? "return gift box" : "snack box";
+  const label = spec.ribbonText.trim() ? `Custom ${noun}` : `${sleeve.name} ${noun}`;
 
   const ribbonTextError = useMemo(() => {
     const r = ribbonTextSchema.safeParse(spec.ribbonText);
@@ -102,7 +113,7 @@ export function BoxBuilder() {
             defaultOpen
           />
           <div className="space-y-4 border-t border-ink/10 p-5 sm:p-6">
-            <DietaryBadges badges={badges} />
+            {kind === "snack" ? <DietaryBadges badges={badges} /> : <p className="text-sm text-mist-muted">Return gifts only — no food in this box.</p>}
             <div className="flex items-end justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-mist-faint">Per box, incl. GST</p>
@@ -131,9 +142,31 @@ export function BoxBuilder() {
 
       {/* ── Configuration steps ── */}
       <div className="space-y-5">
+        <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Box type">
+          {KINDS.map(({ kind: k, title, blurb, icon: Icon }) => (
+            <button
+              key={k}
+              type="button"
+              role="radio"
+              aria-checked={kind === k}
+              onClick={() => setKind(k)}
+              className={cn(
+                "flex items-center gap-3 rounded-2xl border p-4 text-left transition-all",
+                kind === k ? "btn-luxe border-transparent" : "glass border-ink/10 hover:border-champagne/40",
+              )}
+            >
+              <Icon className={cn("size-6 shrink-0", kind === k ? "text-champagne-300" : "text-champagne")} strokeWidth={1.6} aria-hidden />
+              <span>
+                <span className="block font-display text-lg leading-tight font-semibold">{title}</span>
+                <span className={cn("text-xs", kind === k ? "text-ivory/70" : "text-mist-faint")}>{blurb}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+
         <Glass className="p-5 sm:p-6">
-          <StepTitle n={1} title="Sleeve" hint="The printed outer wrap" />
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <StepTitle n={1} title="Box colour" hint="Plain board, any colour" />
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {byCategory("sleeve").map((s) => (
               <button
                 key={s.id}
@@ -145,7 +178,7 @@ export function BoxBuilder() {
                   spec.sleeveId === s.id ? "border-champagne/70 bg-champagne/10" : "border-ink/10 hover:border-ink/25",
                 )}
               >
-                <span className="mb-3 block h-14 rounded-xl" style={{ background: `linear-gradient(135deg, ${s.color}, ${s.color} 55%, ${s.accent})` }} />
+                <span className="mb-3 block h-12 rounded-xl ring-1 ring-ink/10" style={{ background: `linear-gradient(135deg, ${s.color}, ${s.color} 60%, ${s.accent})` }} />
                 <span className="block text-sm font-semibold">{s.name}</span>
                 <span className="text-xs text-mist-faint">{s.price ? `+${formatPaise(s.price)}` : "Included"}</span>
               </button>
@@ -154,7 +187,7 @@ export function BoxBuilder() {
         </Glass>
 
         <Glass className="p-5 sm:p-6">
-          <StepTitle n={2} title="Ribbon & message" hint="Printed on the sleeve band" />
+          <StepTitle n={2} title="Ribbon & message" hint="Printed on the box band" />
           <div className="mt-4 flex flex-wrap gap-3">
             {byCategory("ribbon").map((r) => (
               <button
@@ -192,11 +225,11 @@ export function BoxBuilder() {
           </label>
         </Glass>
 
-        {STEPS.map((step, i) => {
+        {STEPS[kind].map((step, i) => {
           const chosen = Object.keys(spec.items).filter((id) => CATALOG_BY_ID.get(id)?.category === step.category).length;
           return (
             <Glass key={step.category} id={step.category === "favor" ? "favors" : undefined} className="scroll-mt-32 p-5 sm:p-6">
-              <StepTitle n={i + 3} title={step.title} hint={`${step.hint} · ${chosen}/${BOX_RULES[step.category].max}`} />
+              <StepTitle n={i + 3} title={step.title} hint={`${step.hint} · ${chosen}/${BOX_RULES[kind][step.category].max}`} />
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 {byCategory(step.category).map((item) => {
                   const selected = Boolean(spec.items[item.id]);
@@ -214,12 +247,17 @@ export function BoxBuilder() {
                       <span className="mt-0.5 size-10 shrink-0 rounded-xl ring-1 ring-ink/15" style={{ background: `radial-gradient(circle at 30% 30%, #ffffff55, ${item.color} 60%)` }} />
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm font-semibold leading-tight">{item.name}</span>
+                        {item.signature && (
+                          <span className="mt-1 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-gold-foil px-2 py-0.5 font-sub text-[10px] font-bold tracking-wider text-ivory uppercase">
+                            <Sparkles className="size-3" aria-hidden /> Festoon special
+                          </span>
+                        )}
                         <span className="mt-0.5 block text-xs text-mist-faint">{item.blurb}</span>
                         <span className="mt-2 flex flex-wrap items-center gap-1.5 font-sub text-[10px] font-semibold uppercase tracking-wider">
                           <span className="text-mist-muted">{formatPaise(item.price)}</span>
-                          {item.vegan && <span className="rounded bg-mint-300/10 px-1.5 py-0.5 text-mint-300">Vegan</span>}
-                          {!item.eggless && <span className="rounded bg-ink/5 px-1.5 py-0.5 text-mist-muted">Egg</span>}
-                          {item.glutenFree && <span className="rounded bg-lavender/10 px-1.5 py-0.5 text-lavender-300">GF</span>}
+                          {item.category !== "favor" && item.vegan && <span className="rounded bg-mint-300/10 px-1.5 py-0.5 text-mint-300">Vegan</span>}
+                          {item.category !== "favor" && !item.eggless && <span className="rounded bg-ink/5 px-1.5 py-0.5 text-mist-muted">Egg</span>}
+                          {item.category !== "favor" && item.glutenFree && <span className="rounded bg-lavender/10 px-1.5 py-0.5 text-lavender-300">GF</span>}
                           {item.containsNuts && <span className="rounded bg-tangerine/15 px-1.5 py-0.5 text-tangerine-300">Nuts</span>}
                         </span>
                       </span>

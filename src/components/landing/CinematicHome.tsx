@@ -79,7 +79,7 @@ const BEATS: Beat[] = [
     shot: "unveil",
     kicker: "Lift the lid",
     title: "Every celebration, packed like a gift.",
-    body: "The lid lifts. Cake, macarons, truffles — labelled for the people at the table, not a generic hamper.",
+    body: "The lid lifts. Chips, samosa, cake and sweets, labelled for the people at the table, not a generic hamper.",
     pills: ["Eggless", "Vegan", "Gluten-free"],
     primary: { href: "/build", label: "Build with dietary filters" },
   },

@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   BOX_RULES,
   CATALOG_BY_ID,
+  boxKindOf,
   MAX_BOXES_PER_LINE,
   PACKAGING_FEE,
   RIBBON_TEXT_MAX,
@@ -54,9 +55,10 @@ export const boxSpecSchema = z
       }
       counts[item.category] += qty;
     }
-    for (const [cat, { min, max }] of Object.entries(BOX_RULES) as [Category, { min: number; max: number }][]) {
-      if (counts[cat] < min) ctx.addIssue({ code: "custom", message: `Pick at least ${min} ${cat}` });
-      if (counts[cat] > max) ctx.addIssue({ code: "custom", message: `At most ${max} ${cat} per box` });
+    const kind = boxKindOf(spec.items);
+    for (const [cat, { min, max }] of Object.entries(BOX_RULES[kind]) as [Category, { min: number; max: number }][]) {
+      if (counts[cat] < min) ctx.addIssue({ code: "custom", message: kind === "gift" ? "Pick at least 1 return gift" : `Pick at least ${min} ${cat}` });
+      if (counts[cat] > max) ctx.addIssue({ code: "custom", message: `At most ${max} ${cat === "favor" ? "return gifts" : cat} per box` });
     }
   });
 

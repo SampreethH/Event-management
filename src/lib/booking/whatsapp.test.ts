@@ -6,7 +6,7 @@ import type { CartInput } from "./schema";
 const line = {
   label: "Birthday box",
   quantity: 24,
-  spec: { sleeveId: "sleeve-lavender-haze", ribbonId: "ribbon-gold-satin", ribbonText: "Happy 30th *Riya*", items: { "snack-nachos-salsa": 1, "cake-red-velvet": 1 } },
+  spec: { sleeveId: "sleeve-pink", ribbonId: "ribbon-gold-satin", ribbonText: "Happy 30th *Riya*", items: { "snack-salted-chips": 1, "cake-plain-vanilla": 1 } },
 };
 const cart: CartInput = { lines: [line], decor: ["neon-backdrop"], express: false };
 
@@ -45,7 +45,7 @@ describe("WhatsApp encoder", () => {
       lines: Array.from({ length: 10 }, (_, i) => ({
         ...line,
         label: `Design number ${i + 1} with a long name`,
-        spec: { ...line.spec, items: { "snack-nachos-salsa": 1, "snack-masala-makhana": 1, "snack-trail-mix": 1, "snack-caramel-popcorn": 1, "cake-red-velvet": 1, "conf-macaron-duo": 1, "conf-kaju-katli": 1, "favor-tote": 1, "favor-mini-candle": 1 } },
+        spec: { ...line.spec, items: { "snack-salted-chips": 1, "snack-peri-peri-chips": 1, "snack-khara-mixture": 1, "snack-samosa": 1, "cake-plain-vanilla": 1, "conf-jalebi": 1, "conf-kaju-katli": 1, "favor-jute-bag": 1, "favor-steel-bottle": 1 } },
       })),
       decor: [],
       express: false,

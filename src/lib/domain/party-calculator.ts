@@ -29,22 +29,22 @@ const TYPICAL_OVERBUY = 1.25;
 /** Curated starting recipes per dominant age group, used for the estimate. */
 export const STARTER_SPECS: Record<"kids" | "teens" | "adults", BoxSpec> = {
   kids: {
-    sleeveId: "sleeve-coral-pop",
+    sleeveId: "sleeve-red",
     ribbonId: "ribbon-gold-satin",
     ribbonText: "",
-    items: { "snack-caramel-popcorn": 1, "snack-masala-makhana": 1, "cake-red-velvet": 1, "conf-vegan-gummies": 1, "favor-bubble-wand": 1 },
+    items: { "snack-salted-chips": 1, "snack-samosa": 1, "snack-cream-bun-chocolate": 1, "cake-plain-vanilla": 1, "conf-eclairs": 1, "favor-bubble-wand": 1 },
   },
   teens: {
-    sleeveId: "sleeve-lavender-haze",
-    ribbonId: "ribbon-lavender-organza",
+    sleeveId: "sleeve-blue",
+    ribbonId: "ribbon-white-satin",
     ribbonText: "",
-    items: { "snack-nachos-salsa": 1, "snack-veg-sliders": 1, "cake-belgian-chocolate": 1, "conf-chocolate-coins": 1, "favor-glow-sticks": 1 },
+    items: { "snack-peri-peri-chips": 1, "snack-peri-peri-samosa": 1, "snack-veg-puff": 1, "cake-plain-chocolate": 1, "conf-chocolate-bar": 1, "favor-glow-sticks": 1 },
   },
   adults: {
-    sleeveId: "sleeve-midnight-foil",
+    sleeveId: "sleeve-black",
     ribbonId: "ribbon-gold-satin",
     ribbonText: "",
-    items: { "snack-paneer-puffs": 1, "snack-trail-mix": 1, "cake-almond-orange": 1, "conf-macaron-duo": 1, "favor-mini-candle": 1 },
+    items: { "snack-kachori": 1, "snack-khara-mixture": 1, "snack-banana-chips": 1, "cake-honey": 1, "conf-mysore-pak": 1, "conf-jalebi": 1 },
   },
 };
 
