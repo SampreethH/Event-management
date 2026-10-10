@@ -31,7 +31,7 @@ export function ReorderButton({ lines }: { lines: CartLine[] }) {
 
 export function InvoiceLink({ orderId }: { orderId: string }) {
   return (
-    <a href={`/api/orders/${orderId}/invoice`} className="inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm text-mist-muted hover:bg-white/5 hover:text-mist">
+    <a href={`/api/orders/${orderId}/invoice`} className="inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm text-mist-muted hover:bg-ink/5 hover:text-mist">
       <Download className="size-4" /> Invoice
     </a>
   );

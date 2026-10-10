@@ -90,7 +90,7 @@ export function OccasionSwitcher() {
 
       <header className="max-w-2xl">
         <p className="font-sub text-xs font-semibold tracking-[0.28em] text-celebration-gold/80 uppercase">Pick the occasion</p>
-        <h2 className="mt-3 font-display text-4xl leading-[1.02] font-bold text-balance sm:text-5xl">One studio, every kind of party.</h2>
+        <h2 className="mt-3 font-display text-4xl leading-[1.02] font-semibold text-balance sm:text-5xl">One studio, every kind of party.</h2>
       </header>
 
       <div role="tablist" aria-label="Occasion" className="mt-8 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
@@ -105,17 +105,17 @@ export function OccasionSwitcher() {
             onClick={() => setActive(i)}
             className={cn(
               "relative flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 font-sub text-sm font-medium transition-colors",
-              i === active ? "text-dark-bg" : "text-mist-muted hover:text-mist",
+              i === active ? "text-ivory" : "text-mist-muted hover:text-mist",
             )}
           >
             {i === active && (
               <motion.span
                 layoutId="occ-pill"
-                className="absolute inset-0 rounded-full bg-gradient-to-b from-[#F9DD84] to-celebration-gold"
+                className="absolute inset-0 rounded-full btn-luxe"
                 transition={{ type: "spring", stiffness: 380, damping: 32 }}
               />
             )}
-            {i !== active && <span className="absolute inset-0 rounded-full border border-white/12 bg-white/[0.03]" />}
+            {i !== active && <span className="absolute inset-0 rounded-full border border-ink/12 bg-ink/[0.03]" />}
             <x.Icon className="relative size-4" aria-hidden />
             <span className="relative">{x.tab}</span>
           </button>
@@ -123,7 +123,7 @@ export function OccasionSwitcher() {
       </div>
 
       <div id="occ-panel" role="tabpanel" aria-labelledby={`occ-tab-${o.id}`} className="mt-8 grid items-stretch gap-6 lg:grid-cols-[1.15fr_1fr]">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] border border-white/10 bg-dark-card lg:aspect-auto lg:min-h-[440px]">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] border border-ink/10 bg-dark-card lg:aspect-auto lg:min-h-[440px]">
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={o.id}
@@ -148,7 +148,7 @@ export function OccasionSwitcher() {
               exit={{ opacity: 0, y: -12, filter: "blur(4px)" }}
               transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
             >
-              <h3 className="font-display text-3xl leading-tight font-bold text-balance sm:text-4xl">{o.title}</h3>
+              <h3 className="font-display text-3xl leading-tight font-semibold text-balance sm:text-4xl">{o.title}</h3>
               <p className="mt-4 leading-relaxed text-mist-muted">{o.body}</p>
               <p className="mt-8 font-sub text-[11px] font-semibold tracking-[0.24em] text-mist-faint uppercase">In the suggested box</p>
               <ul className="mt-3 space-y-2.5">
@@ -171,7 +171,7 @@ export function OccasionSwitcher() {
           <Link
             href="/build"
             onClick={() => setSleeve(o.sleeveId)}
-            className="group mt-10 inline-flex h-12 w-fit items-center gap-2 rounded-full bg-gradient-to-b from-[#F9DD84] to-celebration-gold px-6 text-[15px] font-medium text-dark-bg shadow-[0_0_32px_-4px_rgba(245,208,97,0.55)] transition-shadow hover:shadow-[0_0_44px_-2px_rgba(245,208,97,0.75)]"
+            className="group mt-10 inline-flex h-12 w-fit items-center gap-2 rounded-full btn-luxe px-6 text-[15px] font-medium text-ivory transition-shadow hover:-translate-y-0.5"
           >
             Start this box
             <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />

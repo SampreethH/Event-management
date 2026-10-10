@@ -20,7 +20,7 @@ export function AnnouncementTicker() {
   const text = "font-sub text-[11px] font-medium tracking-[0.1em] uppercase text-[#E9D9A6] sm:text-xs";
 
   return (
-    <div className="relative h-8 overflow-hidden border-b border-white/[0.06] bg-[#0A0B10]/90 backdrop-blur-md" role="region" aria-label="Announcement">
+    <div className="relative h-8 overflow-hidden border-b border-ink/[0.06] bg-ink backdrop-blur-md" role="region" aria-label="Announcement">
       {/* md+: centred static line with a gentle float */}
       <motion.p
         className={`hidden h-full items-center justify-center md:flex ${text}`}

@@ -47,7 +47,7 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
 
       <Glass className="p-6">
         <h2 className="font-display text-xl font-semibold">What&apos;s coming</h2>
-        <ul className="mt-4 divide-y divide-white/10 text-sm">
+        <ul className="mt-4 divide-y divide-ink/10 text-sm">
           {order.lines.map((l) => (
             <li key={l.id} className="flex justify-between py-2.5">
               <span>
@@ -66,7 +66,7 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
 
       <Glass className="p-6">
         <h2 className="font-display text-xl font-semibold">Timeline</h2>
-        <ol className="mt-4 space-y-3 border-l border-white/10 pl-5 text-sm">
+        <ol className="mt-4 space-y-3 border-l border-ink/10 pl-5 text-sm">
           {order.events.map((e) => (
             <li key={e.id} className="relative">
               <span className="absolute top-1.5 -left-[25px] size-2.5 rounded-full bg-champagne" />

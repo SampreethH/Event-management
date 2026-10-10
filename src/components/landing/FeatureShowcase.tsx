@@ -25,7 +25,7 @@ const FEATURES: Feature[] = [
     body: "Pick the sleeve, print your message, choose snacks and cake tiers. Watch it assemble, with live dietary checks.",
     Icon: Boxes,
     accent: "text-celebration-gold bg-celebration-gold/10",
-    glow: "rgba(245,208,97,0.16)",
+    glow: "rgba(138,100,39,0.16)",
     badges: [
       { label: "Eggless", tone: "success" },
       { label: "Vegan", tone: "success" },
@@ -62,7 +62,7 @@ const FEATURES: Feature[] = [
     body: "Seed-paper confetti cards, soy candles, giant bubble wands and personalised totes, packed in every box.",
     Icon: Gift,
     accent: "text-celebration-gold bg-celebration-gold/10",
-    glow: "rgba(245,208,97,0.14)",
+    glow: "rgba(138,100,39,0.14)",
     badges: [
       { label: "Personalised", tone: "gold" },
       { label: "Eco seed-paper", tone: "success" },
@@ -71,10 +71,10 @@ const FEATURES: Feature[] = [
 ];
 
 const BADGE: Record<BadgeTone, string> = {
-  success: "bg-celebration-success/15 text-[#6EE7B7] ring-celebration-success/30",
-  lavender: "bg-celebration-lavender/15 text-[#C9B8FD] ring-celebration-lavender/30",
-  gold: "bg-celebration-gold/15 text-[#F9E29A] ring-celebration-gold/30",
-  coral: "bg-celebration-coral/15 text-[#FF918F] ring-celebration-coral/30",
+  success: "bg-celebration-success/15 text-mint-300 ring-celebration-success/30",
+  lavender: "bg-celebration-lavender/15 text-lavender-300 ring-celebration-lavender/30",
+  gold: "bg-celebration-gold/15 text-champagne ring-celebration-gold/30",
+  coral: "bg-celebration-coral/15 text-tangerine-300 ring-celebration-coral/30",
 };
 
 const grid: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
@@ -101,7 +101,7 @@ export function FeatureShowcase() {
         className="mx-auto max-w-2xl text-center"
       >
         <p className="font-sub text-xs font-semibold tracking-[0.28em] text-celebration-gold/80 uppercase">Why festoon</p>
-        <h2 className="mt-3 font-display text-4xl leading-[1.02] font-bold text-balance sm:text-5xl">Everything a party needs, in one cart.</h2>
+        <h2 className="mt-3 font-display text-4xl leading-[1.02] font-semibold text-balance sm:text-5xl">Everything a party needs, in one cart.</h2>
       </motion.header>
 
       <motion.ul
@@ -116,11 +116,11 @@ export function FeatureShowcase() {
             <Link
               href={f.href}
               onMouseMove={trackPointer}
-              className="glass-panel group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-white/20 hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)]"
+              className="glass-panel group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-[0_30px_60px_-30px_rgba(60,42,18,0.28)]"
               style={{ ["--glow" as string]: f.glow }}
             >
               {/* Internal highlights: top specular line + cursor spotlight */}
-              <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" aria-hidden />
+              <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-ink/40 to-transparent" aria-hidden />
               <span
                 className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 style={{ background: "radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), var(--glow), transparent 70%)" }}
@@ -128,7 +128,7 @@ export function FeatureShowcase() {
               />
 
               <div className="relative flex items-start justify-between">
-                <span className={cn("grid size-12 place-items-center rounded-2xl ring-1 ring-white/10 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3", f.accent)}>
+                <span className={cn("grid size-12 place-items-center rounded-2xl ring-1 ring-ink/10 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3", f.accent)}>
                   <f.Icon className="size-6" strokeWidth={1.75} />
                 </span>
                 <ArrowUpRight className="size-5 text-mist-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-mist" />

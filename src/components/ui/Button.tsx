@@ -6,10 +6,11 @@ type Variant = "gold" | "coral" | "glass" | "ghost";
 type Size = "sm" | "md" | "lg";
 
 const VARIANTS: Record<Variant, string> = {
-  gold: "bg-celebration-gold text-dark-bg hover:bg-celebration-goldHover shadow-gold-glow",
+  // Espresso with a gilded edge and a sheen on hover — the house CTA.
+  gold: "btn-luxe hover:-translate-y-px",
   coral: "bg-celebration-coral text-white hover:brightness-110 shadow-glow-coral",
-  glass: "glass text-mist hover:border-white/25 hover:bg-white/10",
-  ghost: "text-mist-muted hover:text-mist hover:bg-white/5",
+  glass: "glass text-mist hover:border-champagne/40 hover:bg-ivory",
+  ghost: "text-mist-muted hover:text-mist hover:bg-ink/5",
 };
 const SIZES: Record<Size, string> = {
   sm: "h-9 px-4 text-sm",

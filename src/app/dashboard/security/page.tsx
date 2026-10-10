@@ -14,7 +14,7 @@ export default async function SecurityPage() {
     <div className="mx-auto max-w-xl px-4 pt-32 sm:px-6">
       <Glass strong className="p-7">
         <ShieldCheck className="size-8 text-mint-300" />
-        <h1 className="mt-4 font-display text-3xl font-bold">2-step verification</h1>
+        <h1 className="mt-4 font-display text-3xl font-semibold">2-step verification</h1>
         {record?.totpEnabledAt ? (
           <p className="mt-3 text-mist-muted">
             On since {record.totpEnabledAt.toLocaleDateString("en-IN")}. Every sign-in asks for a one-time code and your authenticator.

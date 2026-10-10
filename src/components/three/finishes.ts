@@ -15,7 +15,7 @@ export interface FinishSpec {
   label: string;
   /** CSS swatch fill. */
   swatch: string;
-  /** rgb triplet for the page glow behind the box, e.g. "124,92,230". */
+  /** rgb triplet for the page glow behind the box, e.g. "201,162,87" (kept soft: it washes an ivory page). */
   glow: string;
   board: string;
   sheen: string;
@@ -34,7 +34,7 @@ export const FINISHES: Record<SleeveFinish, FinishSpec> = {
     name: "Midnight Foil",
     label: "MIDNIGHT FOIL",
     swatch: "radial-gradient(circle at 30% 30%, #2a2a3d, #0b0b13 60%), #0b0b13",
-    glow: "124,92,230",
+    glow: "201,162,87",
     board: "#0B0B13",
     sheen: "#4B3C8F",
     foil: "#E7BE5C",
@@ -50,7 +50,7 @@ export const FINISHES: Record<SleeveFinish, FinishSpec> = {
     name: "Coral Pop",
     label: "CORAL POP",
     swatch: "radial-gradient(circle at 30% 30%, #ff8f8c, #ff5e5b 60%), #ff5e5b",
-    glow: "255,94,91",
+    glow: "222,150,138",
     board: "#E8504C",
     sheen: "#FFB3A8",
     foil: "#F9E29A",
@@ -66,7 +66,7 @@ export const FINISHES: Record<SleeveFinish, FinishSpec> = {
     name: "Lavender Haze",
     label: "LAVENDER HAZE",
     swatch: "radial-gradient(circle at 30% 30%, #e9ddff, #a78bfa 60%), #a78bfa",
-    glow: "167,139,250",
+    glow: "176,150,204",
     board: "#8F74E6",
     sheen: "#E9DDFF",
     foil: "#F4F1FA",
@@ -82,7 +82,7 @@ export const FINISHES: Record<SleeveFinish, FinishSpec> = {
     name: "Champagne Pleat",
     label: "CHAMPAGNE PLEAT",
     swatch: "radial-gradient(circle at 30% 30%, #f9e29a, #e9c25a 60%), #e9c25a",
-    glow: "245,208,97",
+    glow: "214,184,118",
     board: "#E8CD82",
     sheen: "#FFF8E6",
     foil: "#17130C",

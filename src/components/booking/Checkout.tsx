@@ -96,7 +96,7 @@ export function Checkout({ signedIn }: { signedIn: boolean }) {
     }
   };
 
-  if (!hydrated) return <div className="h-96 animate-pulse rounded-glass bg-white/[0.03]" />;
+  if (!hydrated) return <div className="h-96 animate-pulse rounded-glass bg-ink/[0.03]" />;
   if (result) return <Confirmation result={result} copied={copied} onCopy={() => setCopied(true)} />;
 
   if (!cart.lines.length) {
@@ -120,7 +120,7 @@ export function Checkout({ signedIn }: { signedIn: boolean }) {
         {/* Cart */}
         <Glass className="p-5 sm:p-6">
           <h2 className="font-display text-xl font-semibold">Your boxes</h2>
-          <ul className="mt-4 divide-y divide-white/10">
+          <ul className="mt-4 divide-y divide-ink/10">
             {cart.lines.map((l, i) => (
               <li key={i} className="flex flex-wrap items-center gap-4 py-3">
                 <div className="min-w-0 flex-1">
@@ -130,7 +130,7 @@ export function Checkout({ signedIn }: { signedIn: boolean }) {
                   </p>
                 </div>
                 <Stepper value={l.quantity} onChange={(n) => cart.setQuantity(i, n)} label={`Quantity for ${l.label}`} />
-                <button type="button" onClick={() => cart.remove(i)} className="grid size-10 place-items-center rounded-full text-mist-faint hover:bg-white/5 hover:text-tangerine" aria-label="Remove">
+                <button type="button" onClick={() => cart.remove(i)} className="grid size-10 place-items-center rounded-full text-mist-faint hover:bg-ink/5 hover:text-tangerine" aria-label="Remove">
                   <Trash2 className="size-4" />
                 </button>
               </li>
@@ -145,7 +145,7 @@ export function Checkout({ signedIn }: { signedIn: boolean }) {
                 aria-pressed={cart.decor.includes(k.id)}
                 className={cn(
                   "rounded-full border px-3 py-1.5 text-xs transition-all",
-                  cart.decor.includes(k.id) ? "border-lavender/60 bg-lavender/15 text-lavender-300" : "border-white/10 text-mist-muted hover:border-white/25",
+                  cart.decor.includes(k.id) ? "border-lavender/60 bg-lavender/15 text-lavender-300" : "border-ink/10 text-mist-muted hover:border-ink/25",
                 )}
               >
                 {cart.decor.includes(k.id) && <Check className="mr-1 inline size-3" />}
@@ -241,7 +241,7 @@ export function Checkout({ signedIn }: { signedIn: boolean }) {
                 type="button"
                 onClick={() => setPlan(id)}
                 aria-pressed={plan === id}
-                className={cn("flex items-start gap-3 rounded-2xl border p-3 text-left transition-all", plan === id ? "border-champagne/70 bg-champagne/[0.08]" : "border-white/10 hover:border-white/25")}
+                className={cn("flex items-start gap-3 rounded-2xl border p-3 text-left transition-all", plan === id ? "border-champagne/70 bg-champagne/[0.08]" : "border-ink/10 hover:border-ink/25")}
               >
                 <Icon className={cn("mt-0.5 size-5", plan === id ? "text-champagne" : "text-mist-faint")} />
                 <span>
@@ -253,7 +253,7 @@ export function Checkout({ signedIn }: { signedIn: boolean }) {
           </div>
 
           {plan !== "SPLIT" && (
-            <div className="mt-4 flex gap-2 rounded-full bg-black/30 p-1 text-sm" role="radiogroup" aria-label="Payment provider">
+            <div className="mt-4 flex gap-2 rounded-full bg-ink/[0.05] p-1 text-sm" role="radiogroup" aria-label="Payment provider">
               {(["RAZORPAY", "STRIPE"] as const).map((p) => (
                 <button
                   key={p}
@@ -261,7 +261,7 @@ export function Checkout({ signedIn }: { signedIn: boolean }) {
                   role="radio"
                   aria-checked={provider === p}
                   onClick={() => setProvider(p)}
-                  className={cn("flex-1 rounded-full py-2 font-medium transition-all", provider === p ? "bg-white/10 text-mist" : "text-mist-faint")}
+                  className={cn("flex-1 rounded-full py-2 font-medium transition-all", provider === p ? "bg-ink/10 text-mist" : "text-mist-faint")}
                 >
                   {p === "RAZORPAY" ? "UPI · Cards (Razorpay)" : "International card (Stripe)"}
                 </button>
@@ -276,7 +276,7 @@ export function Checkout({ signedIn }: { signedIn: boolean }) {
             {quote.expressFee > 0 && <Line k="SOS express" v={formatPaise(quote.expressFee)} className="text-tangerine-300" />}
             <Line k="GST" v={formatPaise(quote.tax)} />
             <div className="hairline my-2" />
-            <Line k="Total" v={formatPaise(quote.total)} className="font-display text-lg font-bold text-mist" />
+            <Line k="Total" v={formatPaise(quote.total)} className="font-display text-lg font-semibold text-mist" />
             <Line k={plan === "SPLIT" ? "Due now" : "Pay now"} v={formatPaise(dueNow)} className="text-champagne" />
           </dl>
 
@@ -345,7 +345,7 @@ function Confirmation({ result, copied, onCopy }: { result: BookingResult & { pa
             : "We're holding your slot. Complete payment from your dashboard, or finish on WhatsApp."}
       </p>
       {share && (
-        <div className="mt-6 flex items-center gap-2 rounded-2xl border border-white/10 bg-black/30 p-2 pl-4 text-left">
+        <div className="mt-6 flex items-center gap-2 rounded-2xl border border-ink/10 bg-ink/[0.05] p-2 pl-4 text-left">
           <span className="min-w-0 flex-1 truncate font-mono text-xs text-mist-muted">{share}</span>
           <Button
             size="sm"
@@ -360,7 +360,7 @@ function Confirmation({ result, copied, onCopy }: { result: BookingResult & { pa
         </div>
       )}
       <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <Link href={`/dashboard/orders/${result.orderId}`} className="inline-flex h-11 items-center rounded-full bg-champagne px-5 text-sm font-semibold text-obsidian">
+        <Link href={`/dashboard/orders/${result.orderId}`} className="inline-flex h-11 items-center rounded-full bg-champagne px-5 text-sm font-semibold text-ivory">
           Track order
         </Link>
         {share && (

@@ -91,8 +91,8 @@ export function HeroStage() {
     <section className="relative isolate overflow-hidden">
       {/* Purple bloom behind the box + warm corner glow */}
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
-        <div className="absolute top-[18%] right-[8%] h-[70%] w-[55%] rounded-full bg-[radial-gradient(closest-side,rgba(124,92,230,0.35),rgba(124,92,230,0.12)_55%,transparent)] blur-2xl" />
-        <div className="absolute right-0 bottom-0 h-1/2 w-1/3 bg-[radial-gradient(closest-side,rgba(245,208,97,0.08),transparent)]" />
+        <div className="absolute top-[18%] right-[8%] h-[70%] w-[55%] rounded-full bg-[radial-gradient(closest-side,rgba(201,162,87,0.28),rgba(214,170,160,0.12)_55%,transparent)] blur-2xl" />
+        <div className="absolute right-0 bottom-0 h-1/2 w-1/3 bg-[radial-gradient(closest-side,rgba(138,100,39,0.08),transparent)]" />
       </div>
 
       <div className="relative mx-auto grid min-h-[100svh] max-w-[1400px] grid-rows-[1fr_auto] px-6 pt-28 pb-8 sm:px-10 lg:px-14">
@@ -105,7 +105,7 @@ export function HeroStage() {
               on demand.
             </motion.h1>
 
-            <motion.p variants={rise} className="mt-5 max-w-[30rem] font-sans text-[clamp(1rem,1.4vw,1.2rem)] leading-relaxed text-[#B4BCCB]">
+            <motion.p variants={rise} className="mt-5 max-w-[30rem] font-sans text-[clamp(1rem,1.4vw,1.2rem)] leading-relaxed text-mist-muted">
               Ready-made snacks, cake, and customized return gifts delivered to your doorstep in 60-90 minutes.
             </motion.p>
 
@@ -113,7 +113,7 @@ export function HeroStage() {
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 420, damping: 24 }}>
                 <Link
                   href="/build"
-                  className="inline-flex h-14 items-center rounded-full bg-gradient-to-b from-[#F9DD84] to-celebration-gold px-7 font-sans text-base lg:h-12 lg:px-6 xl:h-14 xl:px-8 xl:text-[17px] font-medium whitespace-nowrap text-dark-bg shadow-[0_0_32px_-4px_rgba(245,208,97,0.55),inset_0_1px_0_rgba(255,255,255,0.5)] transition-shadow duration-300 hover:shadow-[0_0_44px_-2px_rgba(245,208,97,0.75),inset_0_1px_0_rgba(255,255,255,0.5)]"
+                  className="inline-flex h-14 items-center rounded-full btn-luxe px-7 font-sans text-base lg:h-12 lg:px-6 xl:h-14 xl:px-8 xl:text-[17px] font-medium whitespace-nowrap text-ivory transition-shadow duration-300 hover:shadow-[0_0_44px_-2px_rgba(138,100,39,0.75),inset_0_1px_0_rgba(255,255,255,0.5)]"
                 >
                   Design your box
                 </Link>
@@ -121,7 +121,7 @@ export function HeroStage() {
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 420, damping: 24 }}>
                 <Link
                   href="/sos"
-                  className="group inline-flex h-14 items-center gap-2 rounded-full border border-white/20 bg-white/[0.04] px-6 font-sans text-base lg:h-12 lg:px-5 xl:h-14 xl:px-6 xl:text-[17px] whitespace-nowrap text-[#C9B8FD] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-md transition-colors hover:border-celebration-lavender/50 hover:bg-white/[0.07]"
+                  className="group inline-flex h-14 items-center gap-2 rounded-full border border-ink/20 bg-ink/[0.04] px-6 font-sans text-base lg:h-12 lg:px-5 xl:h-14 xl:px-6 xl:text-[17px] whitespace-nowrap text-lavender-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-md transition-colors hover:border-celebration-lavender/50 hover:bg-ink/[0.07]"
                 >
                   <Zap className="size-5 text-celebration-lavender transition-transform group-hover:-rotate-12" aria-hidden />
                   I need it now
@@ -151,7 +151,7 @@ export function HeroStage() {
                 </SceneBoundary>
               )}
             </div>
-            <p className="mt-1 rounded-full border border-white/15 bg-white/[0.05] px-5 py-2 font-sans text-sm text-mist/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-md">
+            <p className="mt-1 rounded-full border border-ink/15 bg-ink/[0.05] px-5 py-2 font-sans text-sm text-mist/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-md">
               Drag to spin • tap or scroll to open
             </p>
           </motion.div>
@@ -177,8 +177,8 @@ export function HeroStage() {
                 className={cn(
                   "inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-sans text-sm transition-all duration-200",
                   diet[key]
-                    ? "border-celebration-gold/60 bg-celebration-gold/10 text-[#F9E29A] shadow-[0_0_16px_-6px_rgba(245,208,97,0.6)]"
-                    : "border-white/15 text-mist-muted hover:border-white/30 hover:text-mist",
+                    ? "border-celebration-gold/60 bg-celebration-gold/10 text-champagne shadow-[0_0_16px_-6px_rgba(138,100,39,0.6)]"
+                    : "border-ink/15 text-mist-muted hover:border-ink/30 hover:text-mist",
                 )}
               >
                 <Icon className="size-4" aria-hidden />
@@ -191,7 +191,7 @@ export function HeroStage() {
             {dietTouched && (
               <motion.p initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="font-sans text-sm text-mist-muted" aria-live="polite">
                 <span className="font-mono text-celebration-gold">{matches}</span> treats match ·{" "}
-                <Link href="/build" className="text-mist underline decoration-white/20 underline-offset-4 hover:decoration-celebration-gold">
+                <Link href="/build" className="text-mist underline decoration-ink/20 underline-offset-4 hover:decoration-celebration-gold">
                   build with them
                 </Link>
               </motion.p>

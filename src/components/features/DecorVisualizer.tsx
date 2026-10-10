@@ -14,7 +14,7 @@ import { Glass } from "@/components/ui/Glass";
 
 const DecorRoomScene = dynamic(() => import("@/components/three/DecorRoomScene"), {
   ssr: false,
-  loading: () => <div className="h-full w-full animate-pulse bg-white/[0.03]" />,
+  loading: () => <div className="h-full w-full animate-pulse bg-ink/[0.03]" />,
 });
 
 const ROOMS: { id: string; label: string; size: RoomSize }[] = [
@@ -58,7 +58,7 @@ export function DecorVisualizer() {
           {evening ? <Sun className="size-3.5" /> : <Moon className="size-3.5" />}
           {evening ? "Daylight" : "Evening glow"}
         </button>
-        <p className="absolute bottom-4 left-4 rounded-full bg-black/40 px-3 py-1 text-xs text-mist-muted backdrop-blur">Drag to look around · scroll to zoom · true to scale</p>
+        <p className="absolute bottom-4 left-4 rounded-full bg-ivory/80 px-3 py-1 text-xs text-mist-muted backdrop-blur">Drag to look around · scroll to zoom · true to scale</p>
       </Glass>
 
       <div className="space-y-4">
@@ -71,7 +71,7 @@ export function DecorVisualizer() {
                 type="button"
                 onClick={() => setRoomId(r.id)}
                 aria-pressed={roomId === r.id}
-                className={cn("rounded-xl border px-3 py-2 text-left text-sm transition-all", roomId === r.id ? "border-champagne/70 bg-champagne/10" : "border-white/10 hover:border-white/25")}
+                className={cn("rounded-xl border px-3 py-2 text-left text-sm transition-all", roomId === r.id ? "border-champagne/70 bg-champagne/10" : "border-ink/10 hover:border-ink/25")}
               >
                 {r.label}
               </button>
@@ -88,9 +88,9 @@ export function DecorVisualizer() {
                 type="button"
                 onClick={() => toggle(k.id)}
                 aria-pressed={kits.includes(k.id)}
-                className={cn("flex items-start gap-3 rounded-xl border p-3 text-left transition-all", kits.includes(k.id) ? "border-lavender/60 bg-lavender/10" : "border-white/10 hover:border-white/25")}
+                className={cn("flex items-start gap-3 rounded-xl border p-3 text-left transition-all", kits.includes(k.id) ? "border-lavender/60 bg-lavender/10" : "border-ink/10 hover:border-ink/25")}
               >
-                <span className={cn("mt-0.5 grid size-5 shrink-0 place-items-center rounded-md border", kits.includes(k.id) ? "border-lavender bg-lavender text-obsidian" : "border-white/25")}>
+                <span className={cn("mt-0.5 grid size-5 shrink-0 place-items-center rounded-md border", kits.includes(k.id) ? "border-lavender bg-lavender text-ivory" : "border-ink/25")}>
                   {kits.includes(k.id) && <Check className="size-3.5" strokeWidth={3} />}
                 </span>
                 <span className="flex-1">

@@ -60,7 +60,7 @@ export function DecorScrub() {
 
   if (reduce) {
     return (
-      <section className="relative overflow-hidden rounded-[1.75rem] border border-white/10">
+      <section className="relative overflow-hidden rounded-[1.75rem] border border-ink/10">
         <div className="relative aspect-video">
           <Image src="/media/decor/decorating-poster.webp" alt="A couple hanging pastel HAPPY BIRTHDAY balloon letters on a white wall" fill sizes="100vw" className="object-cover" />
         </div>
@@ -81,7 +81,7 @@ export function DecorScrub() {
   return (
     <section ref={section} aria-label="Watch a wall get decorated" className="relative h-[260vh]">
       <div className="sticky top-24 h-[calc(100svh-7rem)] min-h-[420px]">
-        <div className="relative h-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-dark-card shadow-[0_40px_90px_-40px_rgba(0,0,0,0.9)]">
+        <div className="relative h-full overflow-hidden rounded-[1.75rem] border border-ink/10 bg-dark-card shadow-[0_40px_90px_-40px_rgba(60,42,18,0.28)]">
           <video
             key={small ? "720" : "1280"}
             ref={video}
@@ -109,14 +109,14 @@ export function DecorScrub() {
                 className="max-w-lg"
               >
                 <p className="font-mono text-xs tracking-widest text-celebration-gold">{current.kicker}</p>
-                <h3 className="mt-2 font-display text-[clamp(2rem,4.5vw,3.6rem)] leading-[1.02] font-bold text-mist">{current.title}</h3>
+                <h3 className="mt-2 font-display text-[clamp(2rem,4.5vw,3.6rem)] leading-[1.02] font-semibold text-mist">{current.title}</h3>
                 <p className="mt-3 max-w-md text-mist-muted sm:text-lg">{current.body}</p>
               </motion.div>
             </AnimatePresence>
 
             <div className="flex items-center gap-3" aria-hidden>
               {STEPS.map((s, i) => (
-                <span key={s.title} className="h-1 w-14 overflow-hidden rounded-full bg-white/15">
+                <span key={s.title} className="h-1 w-14 overflow-hidden rounded-full bg-ink/15">
                   <motion.span
                     className="block h-full origin-left rounded-full bg-celebration-gold"
                     animate={{ scaleX: i <= step ? 1 : 0 }}
@@ -127,7 +127,7 @@ export function DecorScrub() {
             </div>
           </div>
 
-          <p className="absolute top-5 left-6 rounded-full border border-white/15 bg-black/30 px-3 py-1 font-sub text-[11px] tracking-[0.2em] text-mist/80 uppercase backdrop-blur-md sm:left-10">
+          <p className="absolute top-5 left-6 rounded-full border border-ink/15 bg-ink/[0.05] px-3 py-1 font-sub text-[11px] tracking-[0.2em] text-mist/80 uppercase backdrop-blur-md sm:left-10">
             Scroll to decorate
           </p>
         </div>

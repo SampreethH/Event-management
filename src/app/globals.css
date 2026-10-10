@@ -9,17 +9,29 @@
  */
 
 :root {
-  --bg: #050608;
-  --base: #0a0b10;
-  --card: #12131c;
-  --ink: #f8fafc;
-  --ink-muted: #94a3b8;
-  --ink-faint: #64748b;
-  --gold: #f5d061;
-  --coral: #ff5e5b;
-  --lavender: #a78bfa;
-  --success: #10b981;
-  color-scheme: dark;
+  /* Maison palette: ivory paper, espresso ink, antique gold. */
+  --bg: #f7f2e9; /* ivory canvas */
+  --base: #fbf8f2; /* paper */
+  --card: #fffdf8; /* porcelain */
+  --surface-700: #efe7d9;
+  --surface-600: #e4d9c6;
+  --ivory: #fffdf8;
+  --ink: #1f1a14; /* espresso */
+  --ink-muted: #5c5348;
+  --ink-faint: #74695c;
+  --gold: #8a6427; /* antique gold, 4.8:1 on ivory */
+  --gold-deep: #6f4f1d;
+  --gold-soft: #c9a257; /* foil highlight, decorative only */
+  --coral: #a8433b; /* garnet */
+  --coral-text: #96392f;
+  --coral-deep: #82302a;
+  --lavender: #6e5385; /* dusk plum */
+  --lavender-text: #5f4775;
+  --lavender-deep: #4f3a63;
+  --success: #2d7354; /* emerald */
+  --success-text: #276549;
+  --success-deep: #1f533c;
+  color-scheme: light;
 }
 
 /* Canvas colour lives on <html> and propagates to the viewport. Putting it on
@@ -39,17 +51,19 @@ body {
   letter-spacing: 0.01em;
 }
 
-/* Clash Display carries its own tight tracking at headline sizes. */
+/* Cormorant is a high-contrast display serif: it wants a touch of positive
+   tracking-out at weight and slightly looser leading than the old grotesk. */
 h1,
 h2,
 h3,
 .font-display {
-  letter-spacing: -0.015em;
+  letter-spacing: -0.005em;
+  font-weight: 600;
 }
 
 ::selection {
-  background: rgba(245, 208, 97, 0.35);
-  color: #fff;
+  background: rgba(201, 162, 87, 0.35);
+  color: var(--ink);
 }
 
 :focus-visible {
@@ -58,7 +72,7 @@ h3,
   border-radius: 6px;
 }
 
-/* ── Glass OS utilities ────────────────────────────────────────────── */
+/* ── Glass OS utilities (porcelain edition) ───────────────────────────── */
 
 /* Declare only the standard backdrop-filter: Lightning CSS adds the -webkit-
    prefix itself, and a hand-written -webkit- line after it would replace
@@ -66,48 +80,50 @@ h3,
 
 /* Frosted panel (cards, forms, feature tiles). */
 @utility glass-panel {
-  background: rgba(18, 19, 28, 0.65);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  background: rgba(255, 253, 248, 0.78);
+  backdrop-filter: blur(20px) saturate(1.1);
+  border: 1px solid rgba(138, 100, 39, 0.14);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+    0 18px 40px -28px rgba(60, 42, 18, 0.3);
 }
 
 /* Sticky top bar. */
 @utility glass-navbar {
-  background: rgba(10, 11, 16, 0.6);
-  backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 253, 248, 0.72);
+  backdrop-filter: blur(24px) saturate(1.2);
+  border-bottom: 1px solid rgba(138, 100, 39, 0.12);
 }
 
-/* Soft violet→gold bloom; place behind hero art or feature sections. */
+/* Soft champagne→blush bloom; place behind hero art or feature sections. */
 @utility glow-overlay-ambient {
   pointer-events: none;
-  background: radial-gradient(circle at center, rgba(143, 117, 240, 0.12) 0%, rgba(245, 208, 97, 0.03) 50%, transparent 100%);
+  background: radial-gradient(circle at center, rgba(201, 162, 87, 0.16) 0%, rgba(214, 170, 160, 0.08) 50%, transparent 100%);
 }
 
-/* `glass` is the panel recipe plus the glass-highlight top edge; used by most components. */
+/* `glass` is the panel recipe plus a crisp white top edge and a warm, low shadow. */
 @utility glass {
   position: relative;
-  background: rgba(18, 19, 28, 0.65);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 253, 248, 0.72);
+  backdrop-filter: blur(20px) saturate(1.1);
+  border: 1px solid rgba(138, 100, 39, 0.14);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.12),
-    0 30px 60px -30px rgba(0, 0, 0, 0.75);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+    0 30px 60px -36px rgba(60, 42, 18, 0.32);
 }
 
-/* Elevated variant for summaries and modals: denser fill, stronger highlight. */
+/* Elevated variant for summaries and modals: denser fill, deeper shadow. */
 @utility glass-strong {
   position: relative;
-  background: rgba(18, 19, 28, 0.82);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 253, 248, 0.92);
+  backdrop-filter: blur(24px) saturate(1.1);
+  border: 1px solid rgba(138, 100, 39, 0.18);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.14),
-    0 40px 80px -36px rgba(0, 0, 0, 0.85);
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 40px 80px -40px rgba(60, 42, 18, 0.4);
 }
 
-/* Chromatic-dispersion rim: a thin prismatic gradient border via mask. */
+/* Gilded rim: a thin brushed-gold gradient border via mask. */
 @utility glass-prism {
   &::before {
     content: "";
@@ -117,21 +133,21 @@ h3,
     border-radius: inherit;
     background: conic-gradient(
       from 210deg,
-      rgba(245, 208, 97, 0.55),
-      rgba(255, 94, 91, 0.35),
-      rgba(167, 139, 250, 0.55),
-      rgba(120, 220, 255, 0.25),
-      rgba(245, 208, 97, 0.55)
+      rgba(201, 162, 87, 0.9),
+      rgba(241, 223, 174, 0.6),
+      rgba(138, 100, 39, 0.75),
+      rgba(214, 170, 160, 0.5),
+      rgba(201, 162, 87, 0.9)
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
-    opacity: 0.7;
+    opacity: 0.8;
   }
 }
 
-/* Micro-noise grain overlay (inline SVG turbulence, no network request). */
+/* Paper-fibre grain overlay (inline SVG turbulence, no network request). */
 @utility grain {
   &::after {
     content: "";
@@ -139,26 +155,72 @@ h3,
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
-    opacity: 0.07;
-    mix-blend-mode: overlay;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
 
+/* Metallic gold-leaf text: dark bronze edges, a bright champagne highlight. */
 @utility text-gradient-gold {
-  background: linear-gradient(100deg, #f9e29a 0%, #f5d061 35%, #ff918f 70%, #a78bfa 100%);
+  background: linear-gradient(100deg, #7a5520 0%, #b8893e 30%, #d9bd7f 50%, #a07535 72%, #6f4f1d 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
+/* Gold hairline rule, fading out at both ends. */
 @utility hairline {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(138, 100, 39, 0.45), transparent);
 }
 
-/* Fixed ambient party light behind everything: the party-radial base with the
-   violet (top-right) and gold (bottom-left) glows layered on top. */
+/* Hairline with a centred lozenge, as on a letterpress invitation. */
+@utility ornament-rule {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(138, 100, 39, 0.45) 30%, rgba(138, 100, 39, 0.45) 70%, transparent);
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background: var(--bg);
+    border: 1px solid rgba(138, 100, 39, 0.7);
+  }
+}
+
+/* Espresso CTA with a gold edge; a light sheen sweeps across on hover. */
+@utility btn-luxe {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(180deg, #2a231b 0%, var(--ink) 100%);
+  color: var(--ivory);
+  box-shadow:
+    inset 0 1px 0 0 rgba(241, 223, 174, 0.28),
+    0 0 0 1px rgba(201, 162, 87, 0.55),
+    0 14px 30px -14px rgba(31, 26, 20, 0.6);
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 40%;
+    z-index: -1;
+    background: linear-gradient(90deg, transparent, rgba(241, 223, 174, 0.28), transparent);
+    transform: translateX(-120%) skewX(-20deg);
+    pointer-events: none;
+  }
+  &:hover::after {
+    animation: sheen 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Fixed ambient light behind everything: warm paper with a champagne wash
+   (top-right) and a faint blush (bottom-left), like daylight on stationery. */
 .ambient-stage {
   position: fixed;
   inset: 0;
@@ -166,9 +228,9 @@ h3,
   pointer-events: none;
   background-color: var(--bg);
   background-image:
-    radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(245, 208, 97, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(30, 27, 75, 0.4) 0%, rgba(5, 6, 8, 1) 100%);
+    radial-gradient(circle at 82% 16%, rgba(201, 162, 87, 0.18) 0%, transparent 46%),
+    radial-gradient(circle at 14% 86%, rgba(214, 170, 160, 0.16) 0%, transparent 48%),
+    radial-gradient(circle at 50% 40%, rgba(255, 253, 248, 0.9) 0%, rgba(247, 242, 233, 1) 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {

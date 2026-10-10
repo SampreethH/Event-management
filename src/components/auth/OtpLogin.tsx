@@ -92,7 +92,7 @@ export function OtpLogin({ next, reason }: { next?: string; reason?: string }) {
       maxLength={6}
       value={code}
       onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-      className="glass h-16 w-full rounded-2xl text-center font-display text-3xl font-bold tracking-[0.5em] outline-none focus:border-champagne/60"
+      className="glass h-16 w-full rounded-2xl text-center font-display text-3xl font-semibold tracking-[0.5em] outline-none focus:border-champagne/60"
       aria-label="6-digit code"
     />
   );
@@ -104,7 +104,7 @@ export function OtpLogin({ next, reason }: { next?: string; reason?: string }) {
           {step === "totp" || step === "enroll" ? <KeyRound className="size-5" /> : <ShieldCheck className="size-5" />}
         </span>
         <div>
-          <h1 className="font-display text-2xl font-bold">
+          <h1 className="font-display text-2xl font-semibold">
             {step === "identify" ? "Sign in" : step === "otp" ? "Enter your code" : step === "totp" ? "Authenticator code" : "Set up 2-step verification"}
           </h1>
           <p className="text-sm text-mist-muted">
@@ -130,9 +130,9 @@ export function OtpLogin({ next, reason }: { next?: string; reason?: string }) {
                 className="glass h-14 w-full rounded-2xl px-4 outline-none placeholder:text-mist-faint focus:border-champagne/60"
               />
               {!isEmail && (
-                <div className="flex gap-2 rounded-full bg-black/30 p-1 text-sm" role="radiogroup" aria-label="Send code via">
+                <div className="flex gap-2 rounded-full bg-ink/[0.05] p-1 text-sm" role="radiogroup" aria-label="Send code via">
                   {(["WHATSAPP", "SMS"] as const).map((c) => (
-                    <button key={c} type="button" role="radio" aria-checked={channel === c} onClick={() => setChannel(c)} className={cn("flex-1 rounded-full py-2 font-medium", channel === c ? "bg-white/10" : "text-mist-faint")}>
+                    <button key={c} type="button" role="radio" aria-checked={channel === c} onClick={() => setChannel(c)} className={cn("flex-1 rounded-full py-2 font-medium", channel === c ? "bg-ink/10" : "text-mist-faint")}>
                       {c === "WHATSAPP" ? "WhatsApp" : "SMS"}
                     </button>
                   ))}
@@ -164,7 +164,7 @@ export function OtpLogin({ next, reason }: { next?: string; reason?: string }) {
           {(step === "totp" || step === "enroll") && (
             <form onSubmit={verifyTotp} className="space-y-4">
               {step === "enroll" && enroll && (
-                <div className="space-y-2 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm">
+                <div className="space-y-2 rounded-2xl border border-ink/10 bg-ink/[0.05] p-4 text-sm">
                   <p className="text-mist-muted">Add this key to Google Authenticator, 1Password or Authy, then enter the 6-digit code.</p>
                   <p className="font-mono text-base tracking-wider break-all text-champagne select-all">{enroll.secret.match(/.{1,4}/g)?.join(" ")}</p>
                   <a href={enroll.uri} className="inline-block text-xs text-lavender-300 underline">

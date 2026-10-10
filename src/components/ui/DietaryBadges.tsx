@@ -16,7 +16,7 @@ export function DietaryBadges({ badges, className }: { badges: Badges; className
           key={label}
           className={cn(
             "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all duration-300",
-            on ? tone : "border-white/10 text-mist-faint line-through decoration-white/20",
+            on ? tone : "border-ink/10 text-mist-faint line-through decoration-ink/20",
           )}
         >
           <Icon className="size-3.5" aria-hidden />

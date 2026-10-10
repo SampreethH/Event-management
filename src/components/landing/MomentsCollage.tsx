@@ -38,7 +38,7 @@ export function MomentsCollage() {
     <section className="mx-auto max-w-6xl px-4 pt-24 sm:px-6 sm:pt-32">
       <header className="mx-auto max-w-2xl text-center">
         <p className="font-sub text-xs font-semibold tracking-[0.28em] text-celebration-gold/80 uppercase">The moments we pack for</p>
-        <h2 className="mt-3 font-display text-4xl leading-[1.02] font-bold text-balance sm:text-5xl">Every box ends up in a photo like these.</h2>
+        <h2 className="mt-3 font-display text-4xl leading-[1.02] font-semibold text-balance sm:text-5xl">Every box ends up in a photo like these.</h2>
       </header>
 
       {/* Desktop: scattered table. Mobile: a swipeable row of polaroids. */}
@@ -76,10 +76,10 @@ export function MomentsCollage() {
 
 function Polaroid({ m }: { m: (typeof MOMENTS)[number] }) {
   return (
-    <figure className="rounded-[4px] bg-[#F6F1E7] p-[5%] pb-[4%] shadow-[0_26px_50px_-18px_rgba(0,0,0,0.85),0_2px_0_rgba(255,255,255,0.4)_inset]">
+    <figure className="rounded-[4px] bg-white p-[5%] pb-[4%] shadow-[0_26px_50px_-18px_rgba(60,42,18,0.28),0_2px_0_rgba(255,255,255,0.4)_inset]">
       <div className="relative aspect-[4/5] overflow-hidden bg-neutral-300">
         <Image src={m.src} alt={m.alt} fill sizes="(min-width:768px) 25vw, 70vw" className="object-cover" />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(255,255,255,0.18),transparent_40%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(255,255,255,0.9),transparent_40%)]" />
       </div>
       <figcaption className="mt-[6%] text-center font-sub text-[clamp(0.7rem,1.05vw,0.95rem)] font-semibold tracking-wide text-[#3A3328]">{m.caption}</figcaption>
     </figure>

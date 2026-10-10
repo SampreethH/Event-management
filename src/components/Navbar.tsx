@@ -36,14 +36,14 @@ export function Navbar() {
       <div className="px-2 pt-2 sm:px-3">
         <nav
           aria-label="Main"
-          className="glass-navbar mx-auto flex h-[60px] max-w-[1400px] items-center gap-2 rounded-[1.25rem] border border-white/10 pr-3 pl-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_20px_40px_-20px_rgba(0,0,0,0.8)] sm:pl-10"
+          className="glass-navbar mx-auto flex h-[60px] max-w-[1400px] items-center gap-2 rounded-[1.25rem] border border-ink/10 pr-3 pl-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_20px_40px_-20px_rgba(60,42,18,0.28)] sm:pl-10"
         >
           <Link
             href="/"
             onClick={() => setOpen(false)}
-            className="mr-auto font-sans text-[1.35rem] font-medium tracking-tight text-mist"
+            className="mr-auto font-serif text-[1.6rem] font-semibold tracking-[0.02em] text-mist"
           >
-            fest<span className="text-celebration-gold">oo</span>n
+            fest<span className="text-gradient-gold italic">oo</span>n
           </Link>
 
           <ul className="hidden items-center gap-1 font-sans text-[15px] lg:flex">
@@ -57,7 +57,7 @@ export function Navbar() {
                     className={cn(
                       "rounded-full px-4 py-2 transition-colors",
                       active || l.featured
-                        ? "bg-white/10 text-mist shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]"
+                        ? "bg-ink/10 text-mist shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9)]"
                         : "text-mist-muted hover:text-mist",
                     )}
                   >
@@ -71,7 +71,7 @@ export function Navbar() {
           <Link
             href="/checkout"
             aria-label={`Cart, ${shown} boxes`}
-            className="relative ml-3 grid size-10 place-items-center rounded-full bg-gradient-to-b from-[#F9E29A] to-celebration-gold text-dark-bg shadow-[0_6px_20px_-6px_rgba(245,208,97,0.7)] transition-transform hover:-translate-y-0.5 hover:scale-105"
+            className="relative ml-3 grid size-10 place-items-center rounded-full btn-luxe text-ivory transition-transform hover:-translate-y-0.5 hover:scale-105"
           >
             <ShoppingBag className="size-4" strokeWidth={2.2} aria-hidden />
             {shown > 0 && (
@@ -79,7 +79,7 @@ export function Navbar() {
                 key={shown}
                 initial={{ scale: 0.6 }}
                 animate={{ scale: 1 }}
-                className="absolute -top-1 -right-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-celebration-coral px-1 font-mono text-[9px] font-bold text-white ring-2 ring-[#12131C]"
+                className="absolute -top-1 -right-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-celebration-coral px-1 font-mono text-[9px] font-bold text-white ring-2 ring-ivory"
               >
                 {shown > 99 ? "99+" : shown}
               </motion.span>
@@ -101,7 +101,7 @@ export function Navbar() {
             >
               {LINKS.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3 font-sub text-base hover:bg-white/5">
+                  <Link href={l.href} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3 font-sub text-base hover:bg-ink/5">
                     {l.label}
                   </Link>
                 </li>

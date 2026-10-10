@@ -23,7 +23,7 @@ import { Stepper } from "@/components/ui/Stepper";
 // Code-split: the three.js bundle only loads on pages that show the box.
 const LuxuryPartyBox = dynamic(() => import("@/components/three/LuxuryPartyBox"), {
   ssr: false,
-  loading: () => <div className="aspect-square w-full animate-pulse bg-white/[0.03] sm:aspect-[5/4]" />,
+  loading: () => <div className="aspect-square w-full animate-pulse bg-ink/[0.03] sm:aspect-[5/4]" />,
 });
 
 const STEPS: { category: Exclude<Category, "sleeve" | "ribbon">; title: string; hint: string }[] = [
@@ -101,7 +101,7 @@ export function BoxBuilder() {
             items={previewItems}
             defaultOpen
           />
-          <div className="space-y-4 border-t border-white/10 p-5 sm:p-6">
+          <div className="space-y-4 border-t border-ink/10 p-5 sm:p-6">
             <DietaryBadges badges={badges} />
             <div className="flex items-end justify-between gap-4">
               <div>
@@ -113,7 +113,7 @@ export function BoxBuilder() {
                     animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
                     exit={{ y: -12, opacity: 0, filter: "blur(4px)" }}
                     transition={{ duration: 0.25 }}
-                    className="font-display text-4xl font-bold tabular-nums text-mist"
+                    className="font-display text-4xl font-semibold tabular-nums text-mist"
                   >
                     {formatPaise(quote.perBoxEffective)}
                   </motion.p>
@@ -142,7 +142,7 @@ export function BoxBuilder() {
                 aria-pressed={spec.sleeveId === s.id}
                 className={cn(
                   "group rounded-2xl border p-3 text-left transition-all",
-                  spec.sleeveId === s.id ? "border-champagne/70 bg-champagne/10" : "border-white/10 hover:border-white/25",
+                  spec.sleeveId === s.id ? "border-champagne/70 bg-champagne/10" : "border-ink/10 hover:border-ink/25",
                 )}
               >
                 <span className="mb-3 block h-14 rounded-xl" style={{ background: `linear-gradient(135deg, ${s.color}, ${s.color} 55%, ${s.accent})` }} />
@@ -164,10 +164,10 @@ export function BoxBuilder() {
                 aria-pressed={spec.ribbonId === r.id}
                 className={cn(
                   "inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition-all",
-                  spec.ribbonId === r.id ? "border-champagne/70 bg-champagne/10" : "border-white/10 hover:border-white/25",
+                  spec.ribbonId === r.id ? "border-champagne/70 bg-champagne/10" : "border-ink/10 hover:border-ink/25",
                 )}
               >
-                <span className="size-4 rounded-full ring-1 ring-white/20" style={{ background: r.color }} />
+                <span className="size-4 rounded-full ring-1 ring-ink/20" style={{ background: r.color }} />
                 {r.name}
                 {r.price > 0 && <span className="text-xs text-mist-faint">+{formatPaise(r.price)}</span>}
               </button>
@@ -208,17 +208,17 @@ export function BoxBuilder() {
                       aria-pressed={selected}
                       className={cn(
                         "relative flex items-start gap-3 rounded-2xl border p-3 text-left transition-all",
-                        selected ? "border-champagne/70 bg-champagne/[0.08]" : "border-white/10 hover:border-white/25 hover:bg-white/[0.03]",
+                        selected ? "border-champagne/70 bg-champagne/[0.08]" : "border-ink/10 hover:border-ink/25 hover:bg-ink/[0.03]",
                       )}
                     >
-                      <span className="mt-0.5 size-10 shrink-0 rounded-xl ring-1 ring-white/15" style={{ background: `radial-gradient(circle at 30% 30%, #ffffff55, ${item.color} 60%)` }} />
+                      <span className="mt-0.5 size-10 shrink-0 rounded-xl ring-1 ring-ink/15" style={{ background: `radial-gradient(circle at 30% 30%, #ffffff55, ${item.color} 60%)` }} />
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm font-semibold leading-tight">{item.name}</span>
                         <span className="mt-0.5 block text-xs text-mist-faint">{item.blurb}</span>
                         <span className="mt-2 flex flex-wrap items-center gap-1.5 font-sub text-[10px] font-semibold uppercase tracking-wider">
                           <span className="text-mist-muted">{formatPaise(item.price)}</span>
                           {item.vegan && <span className="rounded bg-mint-300/10 px-1.5 py-0.5 text-mint-300">Vegan</span>}
-                          {!item.eggless && <span className="rounded bg-white/5 px-1.5 py-0.5 text-mist-muted">Egg</span>}
+                          {!item.eggless && <span className="rounded bg-ink/5 px-1.5 py-0.5 text-mist-muted">Egg</span>}
                           {item.glutenFree && <span className="rounded bg-lavender/10 px-1.5 py-0.5 text-lavender-300">GF</span>}
                           {item.containsNuts && <span className="rounded bg-tangerine/15 px-1.5 py-0.5 text-tangerine-300">Nuts</span>}
                         </span>
@@ -226,7 +226,7 @@ export function BoxBuilder() {
                       <span
                         className={cn(
                           "grid size-6 shrink-0 place-items-center rounded-full border transition-all",
-                          selected ? "border-champagne bg-champagne text-obsidian" : "border-white/20",
+                          selected ? "border-champagne bg-champagne text-ivory" : "border-ink/20",
                         )}
                         aria-hidden
                       >
@@ -258,7 +258,7 @@ export function BoxBuilder() {
                 </span>
               ))}
             </div>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-ink/10">
               <motion.div
                 className="h-full rounded-full bg-gradient-to-r from-champagne via-tangerine to-lavender"
                 animate={{ width: `${((tierIdx + Math.min(1, tierProgress)) / BULK_TIERS.length) * 100}%` }}
@@ -333,7 +333,7 @@ function StepTitle({ n, title, hint }: { n: number; title: string; hint: string 
 
 function Row({ k, v, strong, accent }: { k: string; v: string; strong?: boolean; accent?: boolean }) {
   return (
-    <div className={cn("flex justify-between", strong ? "font-display text-lg font-bold" : "text-mist-muted", accent && "text-mint-300")}>
+    <div className={cn("flex justify-between", strong ? "font-display text-lg font-semibold" : "text-mist-muted", accent && "text-mint-300")}>
       <dt>{k}</dt>
       <dd className="tabular-nums">{v}</dd>
     </div>

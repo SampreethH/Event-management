@@ -27,7 +27,7 @@ export function FinishPicker({ value, onChange }: { value: SleeveFinish; onChang
       <div
         role="radiogroup"
         aria-label="Box sleeve"
-        className="flex items-center gap-3 rounded-full border border-white/12 bg-[#0B0C14]/70 py-2 pr-4 pl-2 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl"
+        className="flex items-center gap-3 rounded-full border border-ink/12 bg-ivory/85 py-2 pr-4 pl-2 shadow-[0_20px_50px_-20px_rgba(60,42,18,0.28)] backdrop-blur-xl"
       >
         <div className="flex items-center gap-1.5">
           {FINISH_ORDER.map((f) => {
@@ -49,11 +49,11 @@ export function FinishPicker({ value, onChange }: { value: SleeveFinish; onChang
                 {active && (
                   <motion.span
                     layoutId="finish-ring"
-                    className="absolute inset-0 rounded-full ring-2 ring-celebration-gold shadow-[0_0_18px_rgba(245,208,97,0.55)]"
+                    className="absolute inset-0 rounded-full ring-2 ring-celebration-gold shadow-[0_0_18px_rgba(138,100,39,0.55)]"
                     transition={{ type: "spring", stiffness: 420, damping: 32 }}
                   />
                 )}
-                <span className="size-6 rounded-full ring-1 ring-white/25" style={{ background: FINISHES[f].swatch }} />
+                <span className="size-6 rounded-full ring-1 ring-ink/25" style={{ background: FINISHES[f].swatch }} />
               </button>
             );
           })}

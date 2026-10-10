@@ -44,14 +44,14 @@ export function SplitPayContribute({ token, link }: { token: string; link: Publi
     <div className="grid gap-6 lg:grid-cols-2">
       <Glass strong prism className="p-7">
         <p className="font-sub text-xs uppercase tracking-[0.3em] text-champagne">Group gift · <span className="font-mono tracking-normal">{link.reference}</span></p>
-        <h1 className="mt-3 font-display text-4xl font-bold leading-tight">{link.theme ? `${link.theme} party` : "A celebration"} for {link.guestCount} guests</h1>
+        <h1 className="mt-3 font-display text-4xl font-semibold leading-tight">{link.theme ? `${link.theme} party` : "A celebration"} for {link.guestCount} guests</h1>
         <p className="mt-2 text-mist-muted">{new Date(link.eventDate).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}</p>
         <div className="mt-8">
           <div className="flex items-end justify-between">
-            <p className="font-display text-3xl font-bold tabular-nums">{formatPaise(link.raised)}</p>
+            <p className="font-display text-3xl font-semibold tabular-nums">{formatPaise(link.raised)}</p>
             <p className="text-sm text-mist-muted">of {formatPaise(link.target)}</p>
           </div>
-          <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-ink/10">
             <motion.div className="h-full rounded-full bg-gradient-to-r from-champagne via-tangerine to-lavender" initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 1.1, ease: [0.2, 0.8, 0.2, 1] }} />
           </div>
         </div>
@@ -82,7 +82,7 @@ export function SplitPayContribute({ token, link }: { token: string; link: Publi
             <h2 className="font-display text-2xl font-semibold">Chip in</h2>
             <div className="flex flex-wrap gap-2">
               {presets.map((p) => (
-                <button key={p} type="button" onClick={() => setAmount(p)} className={cn("rounded-full border px-4 py-2 text-sm font-semibold tabular-nums", amount === p ? "border-champagne bg-champagne/15 text-champagne" : "border-white/10 hover:border-white/25")}>
+                <button key={p} type="button" onClick={() => setAmount(p)} className={cn("rounded-full border px-4 py-2 text-sm font-semibold tabular-nums", amount === p ? "border-champagne bg-champagne/15 text-champagne" : "border-ink/10 hover:border-ink/25")}>
                   {p === remaining ? `Cover the rest · ${formatPaise(p)}` : formatPaise(p)}
                 </button>
               ))}
@@ -93,9 +93,9 @@ export function SplitPayContribute({ token, link }: { token: string; link: Publi
             </label>
             <input required maxLength={60} placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} className="glass h-12 w-full rounded-2xl px-4 text-sm outline-none placeholder:text-mist-faint" />
             <input maxLength={140} placeholder="A note for the host (optional)" value={note} onChange={(e) => setNote(e.target.value)} className="glass h-12 w-full rounded-2xl px-4 text-sm outline-none placeholder:text-mist-faint" />
-            <div className="flex gap-2 rounded-full bg-black/30 p-1 text-sm">
+            <div className="flex gap-2 rounded-full bg-ink/[0.05] p-1 text-sm">
               {(["RAZORPAY", "STRIPE"] as const).map((p) => (
-                <button key={p} type="button" onClick={() => setProvider(p)} className={cn("flex-1 rounded-full py-2 font-medium", provider === p ? "bg-white/10" : "text-mist-faint")}>
+                <button key={p} type="button" onClick={() => setProvider(p)} className={cn("flex-1 rounded-full py-2 font-medium", provider === p ? "bg-ink/10" : "text-mist-faint")}>
                   {p === "RAZORPAY" ? "UPI / Cards" : "International card"}
                 </button>
               ))}

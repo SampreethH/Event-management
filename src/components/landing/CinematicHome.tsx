@@ -150,7 +150,7 @@ function ScrollHint({ label }: { label: string }) {
       transition={{ delay: 1.1, duration: 0.6 }}
       className="mt-10 flex items-center gap-2 font-sub text-xs tracking-[0.22em] text-mist-muted uppercase"
     >
-      <span className="grid size-8 place-items-center rounded-full border border-white/15 bg-white/5">
+      <span className="grid size-8 place-items-center rounded-full border border-ink/15 bg-ink/5">
         <ArrowDown className="size-3.5 animate-bounce" aria-hidden />
       </span>
       {label}
@@ -170,17 +170,20 @@ function BeatCopy({ beat, active }: { beat: Beat; active: boolean }) {
           transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
           className="max-w-xl"
         >
-          <p className="font-sub text-xs font-semibold tracking-[0.32em] text-celebration-gold/85 uppercase">{beat.kicker}</p>
-          <h2 className="mt-4 font-display text-[clamp(2.4rem,5vw,4.4rem)] leading-[1.04] font-bold tracking-tight text-balance text-mist">
+          <p className="flex items-center gap-3 font-sub text-xs font-semibold tracking-[0.32em] text-celebration-gold uppercase">
+            <span className="h-px w-8 bg-gradient-to-r from-transparent to-celebration-gold" aria-hidden />
+            {beat.kicker}
+          </p>
+          <h2 className="mt-4 font-display text-[clamp(2.4rem,5vw,4.4rem)] leading-[1.04] font-semibold tracking-tight text-balance text-mist">
             {beat.title}
           </h2>
-          <p className="mt-5 max-w-md text-[clamp(1rem,1.3vw,1.2rem)] leading-relaxed text-[#B4BCCB]">{beat.body}</p>
+          <p className="mt-5 max-w-md text-[clamp(1rem,1.3vw,1.2rem)] leading-relaxed text-mist-muted">{beat.body}</p>
           {beat.pills && (
             <ul className="mt-6 flex flex-wrap gap-2">
               {beat.pills.map((p) => (
                 <li
                   key={p}
-                  className="rounded-full border border-celebration-gold/35 bg-celebration-gold/10 px-3.5 py-1.5 font-sub text-xs font-medium text-[#F9E29A]"
+                  className="rounded-full border border-celebration-gold/35 bg-celebration-gold/10 px-3.5 py-1.5 font-sub text-xs font-medium text-champagne"
                 >
                   {p}
                 </li>
@@ -192,7 +195,7 @@ function BeatCopy({ beat, active }: { beat: Beat; active: boolean }) {
               {beat.primary && (
                 <Link
                   href={beat.primary.href}
-                  className="inline-flex h-12 items-center rounded-full bg-gradient-to-b from-[#F9DD84] to-celebration-gold px-6 font-sans text-[15px] font-medium text-dark-bg shadow-[0_0_32px_-4px_rgba(245,208,97,0.55),inset_0_1px_0_rgba(255,255,255,0.5)] transition-shadow hover:shadow-[0_0_44px_-2px_rgba(245,208,97,0.75)]"
+                  className="inline-flex h-12 items-center rounded-full btn-luxe px-6 font-sans text-[15px] font-medium text-ivory transition-shadow hover:-translate-y-0.5"
                 >
                   {beat.primary.label}
                 </Link>
@@ -200,7 +203,7 @@ function BeatCopy({ beat, active }: { beat: Beat; active: boolean }) {
               {beat.secondary && (
                 <Link
                   href={beat.secondary.href}
-                  className="inline-flex h-12 items-center gap-2 rounded-full border border-white/20 bg-white/[0.04] px-5 font-sans text-[15px] text-[#C9B8FD] backdrop-blur-md transition-colors hover:border-celebration-lavender/50 hover:bg-white/[0.07]"
+                  className="inline-flex h-12 items-center gap-2 rounded-full border border-ink/20 bg-ink/[0.04] px-5 font-sans text-[15px] text-lavender-300 backdrop-blur-md transition-colors hover:border-celebration-lavender/50 hover:bg-ink/[0.07]"
                 >
                   {beat.id === "arrive" ? <Zap className="size-4 text-celebration-lavender" aria-hidden /> : <Sparkles className="size-4" aria-hidden />}
                   {beat.secondary.label}
@@ -221,7 +224,7 @@ function ProgressRail({ index }: { index: number }) {
       {BEATS.map((b, i) => (
         <li
           key={b.id}
-          className={cn("h-8 w-px rounded-full transition-all duration-500", i === index ? "bg-celebration-gold shadow-[0_0_12px_rgba(245,208,97,0.8)]" : "bg-white/20")}
+          className={cn("h-8 w-px rounded-full transition-all duration-500", i === index ? "bg-celebration-gold shadow-[0_0_12px_rgba(138,100,39,0.8)]" : "bg-ink/20")}
         />
       ))}
     </ol>
@@ -366,7 +369,7 @@ export function CinematicHome() {
               className="absolute top-[8%] right-[-10%] h-[70%] w-[65%] rounded-full blur-2xl transition-[background] duration-700"
               style={{ background: `radial-gradient(closest-side, rgba(${glow},0.32), rgba(${glow},0.08) 55%, transparent)` }}
             />
-            <div className="absolute bottom-[8%] left-[8%] h-[40%] w-[40%] rounded-full bg-[radial-gradient(closest-side,rgba(245,208,97,0.12),transparent)] blur-2xl" />
+            <div className="absolute bottom-[8%] left-[8%] h-[40%] w-[40%] rounded-full bg-[radial-gradient(closest-side,rgba(138,100,39,0.12),transparent)] blur-2xl" />
           </div>
         </div>
 
@@ -412,7 +415,7 @@ export function CinematicHome() {
               )}
             >
               <div className="pointer-events-none mx-auto flex w-full max-w-[1400px]">
-                <div className="pointer-events-auto w-full max-w-xl rounded-3xl border border-white/10 bg-[#07080e]/78 p-6 shadow-[0_30px_80px_-24px_rgba(0,0,0,0.85)] backdrop-blur-xl lg:w-[44%] lg:max-w-none lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-blur-none">
+                <div className="pointer-events-auto w-full max-w-xl rounded-3xl border border-ink/10 bg-ivory/85 p-6 shadow-[0_30px_80px_-24px_rgba(60,42,18,0.28)] backdrop-blur-xl lg:w-[44%] lg:max-w-none lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-blur-none">
                   <BeatCopy beat={beat} active={index === i || reduce} />
                 </div>
               </div>
@@ -441,14 +444,14 @@ export function CinematicHome() {
       <section className="mx-auto grid max-w-6xl gap-4 px-4 pt-32 sm:px-6 md:grid-cols-2">
         <Glass prism className="p-8">
           <Users className="size-8 text-lavender" strokeWidth={1.5} />
-          <h3 className="mt-6 font-display text-3xl font-bold">Split the bill, not the friendship.</h3>
+          <h3 className="mt-6 font-display text-3xl font-semibold">Split the bill, not the friendship.</h3>
           <p className="mt-3 text-mist-muted">
             Choose group split-pay at checkout and share one secure link. Cousins, colleagues and co-hosts chip in any amount; we start packing the moment it&apos;s funded.
           </p>
         </Glass>
         <Glass className="p-8">
           <ShieldCheck className="size-8 text-mint-300" strokeWidth={1.5} />
-          <h3 className="mt-6 font-display text-3xl font-bold">Explore freely. Book securely.</h3>
+          <h3 className="mt-6 font-display text-3xl font-semibold">Explore freely. Book securely.</h3>
           <p className="mt-3 text-mist-muted">
             Design and price without an account. When you book, a one-time code verifies it&apos;s you — with optional authenticator-app 2FA. Addresses are encrypted at rest.
           </p>
@@ -459,7 +462,7 @@ export function CinematicHome() {
 
       <section className="mx-auto max-w-4xl px-4 pt-32 text-center sm:px-6">
         <p className="font-sub text-xs font-semibold tracking-[0.28em] text-celebration-gold/80 uppercase">Concierge</p>
-        <h2 className="mt-4 font-display text-[clamp(2.4rem,6vw,4.5rem)] leading-none font-bold tracking-tight text-balance">
+        <h2 className="mt-4 font-display text-[clamp(2.4rem,6vw,4.5rem)] leading-none font-semibold tracking-tight text-balance">
           Something bespoke in mind?
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-lg text-mist-muted">Weddings, launches, 200-kid school days. Our concierge will design it with you.</p>

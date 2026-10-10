@@ -61,7 +61,7 @@ export function PartyCalculator() {
                 type="button"
                 onClick={() => setInput({ ...input, theme: t })}
                 aria-pressed={input.theme === t}
-                className={cn("rounded-full border px-3 py-1.5 text-sm transition-all", input.theme === t ? "border-lavender/70 bg-lavender/15 text-lavender-300" : "border-white/10 text-mist-muted hover:border-white/25")}
+                className={cn("rounded-full border px-3 py-1.5 text-sm transition-all", input.theme === t ? "border-lavender/70 bg-lavender/15 text-lavender-300" : "border-ink/10 text-mist-muted hover:border-ink/25")}
               >
                 {t}
               </button>
@@ -98,7 +98,7 @@ export function PartyCalculator() {
           <div className="flex items-end justify-between">
             <div>
               <p className="text-xs text-mist-faint">Estimated total incl. GST</p>
-              <motion.p key={plan.estimate.total} initial={{ opacity: 0.4 }} animate={{ opacity: 1 }} className="font-display text-4xl font-bold tabular-nums">
+              <motion.p key={plan.estimate.total} initial={{ opacity: 0.4 }} animate={{ opacity: 1 }} className="font-display text-4xl font-semibold tabular-nums">
                 {formatPaise(plan.estimate.total)}
               </motion.p>
             </div>
@@ -119,7 +119,7 @@ export function PartyCalculator() {
 
 function Metric({ icon, k, v, sub }: { icon: React.ReactNode; k: string; v: string; sub: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <div className="rounded-2xl border border-ink/10 bg-ink/[0.03] p-4">
       <p className="flex items-center gap-1.5 text-xs text-mist-faint">
         {icon}
         {k}

@@ -25,10 +25,10 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   return (
     <div className="mx-auto max-w-[1400px] px-4 pt-28 sm:px-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <h1 className="font-display text-4xl font-bold">Ops portal</h1>
+        <h1 className="font-display text-4xl font-semibold">Ops portal</h1>
         <nav className="glass flex rounded-full p-1 text-sm" aria-label="Ops sections">
           {TABS.map((t) => (
-            <Link key={t} href={`/admin?tab=${t}`} className={cn("rounded-full px-4 py-2 capitalize", tab === t ? "bg-white/10 text-mist" : "text-mist-muted hover:text-mist")}>
+            <Link key={t} href={`/admin?tab=${t}`} className={cn("rounded-full px-4 py-2 capitalize", tab === t ? "bg-ink/10 text-mist" : "text-mist-muted hover:text-mist")}>
               {t}
             </Link>
           ))}
@@ -67,7 +67,7 @@ async function Pipeline({ user }: { user: U }) {
         return (
           <section key={col} className="min-w-[260px]">
             <h2 className="mb-3 flex items-center justify-between px-1 text-sm font-semibold">
-              {STATUS_LABEL[col]} <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-mist-faint">{cards.length}</span>
+              {STATUS_LABEL[col]} <span className="rounded-full bg-ink/5 px-2 py-0.5 text-xs text-mist-faint">{cards.length}</span>
             </h2>
             <div className="space-y-2">
               {cards.map((o) => (
@@ -87,7 +87,7 @@ async function Pipeline({ user }: { user: U }) {
                       <form key={to} action={moveOrder}>
                         <input type="hidden" name="orderId" value={o.id} />
                         <input type="hidden" name="to" value={to} />
-                        <button className={cn("rounded-full border px-2.5 py-1 text-xs", to === "CANCELLED" ? "border-white/10 text-mist-faint hover:text-tangerine" : "border-champagne/40 text-champagne hover:bg-champagne/10")}>
+                        <button className={cn("rounded-full border px-2.5 py-1 text-xs", to === "CANCELLED" ? "border-ink/10 text-mist-faint hover:text-tangerine" : "border-champagne/40 text-champagne hover:bg-champagne/10")}>
                           → {STATUS_LABEL[to]}
                         </button>
                       </form>
@@ -114,7 +114,7 @@ async function Inventory({ user }: { user: U }) {
     <Glass className="overflow-x-auto p-0">
       <table className="w-full min-w-[820px] text-sm">
         <thead className="text-left text-xs uppercase tracking-wider text-mist-faint">
-          <tr className="border-b border-white/10">
+          <tr className="border-b border-ink/10">
             <th className="p-4">SKU</th>
             <th className="p-4">Item</th>
             <th className="p-4 text-right">On hand</th>
@@ -127,7 +127,7 @@ async function Inventory({ user }: { user: U }) {
           {items.map((i) => {
             const low = i.onHand - i.reserved <= i.reorderAt;
             return (
-              <tr key={i.id} className="border-b border-white/5">
+              <tr key={i.id} className="border-b border-ink/5">
                 <td className="p-4 font-mono text-xs text-mist-muted">{i.sku}</td>
                 <td className="p-4">
                   {i.catalogItem?.name ?? i.decorAsset?.name}
@@ -146,7 +146,7 @@ async function Inventory({ user }: { user: U }) {
                       <option value="count-correction">Count fix</option>
                       <option value="manual">Manual</option>
                     </select>
-                    <button className="rounded-lg bg-white/10 px-3 text-xs hover:bg-white/15">Save</button>
+                    <button className="rounded-lg bg-ink/10 px-3 text-xs hover:bg-ink/15">Save</button>
                   </form>
                 </td>
               </tr>
@@ -196,21 +196,21 @@ async function Calendar({ user, week }: { user: U; week?: string }) {
               <p className="text-xs font-semibold text-mist-muted">{d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", timeZone: IST })}</p>
               <div className="mt-2 space-y-2">
                 {list.map((b) => (
-                  <div key={b.id} className="rounded-xl border border-white/10 bg-black/30 p-2 text-xs">
+                  <div key={b.id} className="rounded-xl border border-ink/10 bg-ink/[0.05] p-2 text-xs">
                     <p className="font-semibold">{b.kit.name}</p>
                     <p className="text-mist-faint">
                       {b.order.reference} · {b.installStart.toLocaleTimeString("en-IN", { timeStyle: "short", timeZone: IST })} · {b.kit.setupMinutes}m
                     </p>
                     <form action={assignDecorator} className="mt-1.5 flex gap-1">
                       <input type="hidden" name="bookingId" value={b.id} />
-                      <select name="decoratorId" defaultValue={b.decoratorId ?? ""} className="h-7 min-w-0 flex-1 rounded-md bg-white/5 px-1 outline-none">
+                      <select name="decoratorId" defaultValue={b.decoratorId ?? ""} className="h-7 min-w-0 flex-1 rounded-md bg-ink/5 px-1 outline-none">
                         <option value="">Unassigned</option>
                         {decorators.map((dec) => (
                           <option key={dec.id} value={dec.id}>{dec.displayName ?? dec.id.slice(-5)}</option>
                         ))}
                       </select>
-                      <input name="routeOrder" type="number" min={1} max={20} defaultValue={b.routeOrder ?? undefined} placeholder="#" className="h-7 w-9 rounded-md bg-white/5 px-1 text-center outline-none" aria-label="Route stop" />
-                      <button className="rounded-md bg-white/10 px-2">✓</button>
+                      <input name="routeOrder" type="number" min={1} max={20} defaultValue={b.routeOrder ?? undefined} placeholder="#" className="h-7 w-9 rounded-md bg-ink/5 px-1 text-center outline-none" aria-label="Route stop" />
+                      <button className="rounded-md bg-ink/10 px-2">✓</button>
                     </form>
                   </div>
                 ))}

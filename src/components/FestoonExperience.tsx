@@ -181,13 +181,13 @@ const makeWordmark =
     ctx.fillText(label, w / 2 + 7, h * 0.78);
   };
 
-/** Soft violet-and-gold pool of light on the floor under the box. */
+/** Soft champagne pool of light on the ivory floor under the box. */
 const paintFloorGlow: Painter = (ctx, w, h) => {
   const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
-  g.addColorStop(0, 'rgba(245,208,97,0.55)');
-  g.addColorStop(0.25, 'rgba(167,139,250,0.45)');
-  g.addColorStop(0.6, 'rgba(110,80,220,0.15)');
-  g.addColorStop(1, 'rgba(80,60,180,0)');
+  g.addColorStop(0, 'rgba(201,162,87,0.45)');
+  g.addColorStop(0.3, 'rgba(214,184,118,0.22)');
+  g.addColorStop(0.65, 'rgba(232,211,162,0.1)');
+  g.addColorStop(1, 'rgba(232,211,162,0)');
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
 };
@@ -698,7 +698,8 @@ function LuxuryMidnightBox({
 // ==========================================
 // 7. CONFETTI: FULL-SCREEN FALL + POPPER BURST
 // ==========================================
-const PAPER = ['#F472B6', '#5EEAD4', '#A78BFA', '#FF8A80', '#93C5FD', '#FFFFFF', '#FDE68A'];
+// Blush, sage, dusk plum, coral, powder blue, champagne and butter — readable on ivory.
+const PAPER = ['#E7A6B4', '#9CC5B0', '#A58BC0', '#F0A08F', '#A9C3DD', '#E8D3A2', '#F3DD8C'];
 const FOIL = ['#F5D061', '#E5B842', '#F9E29A', '#D9D9E3'];
 
 interface Flake {
@@ -886,7 +887,7 @@ function FloorGlow() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.148, 0]}>
       <planeGeometry args={[5, 5]} />
-      <meshBasicMaterial map={glow} transparent blending={THREE.AdditiveBlending} depthWrite={false} opacity={0.6} />
+      <meshBasicMaterial map={glow} transparent depthWrite={false} opacity={0.7} />
     </mesh>
   );
 }
@@ -896,20 +897,21 @@ function FloorGlow() {
 // ==========================================
 /**
  * Product-shot studio: procedural softboxes (no CDN HDR, which the CSP blocks). Long strip
- * lights give the foil and satin clean, believable highlights; violet back light rims the edges.
+ * lights give the foil and satin clean, believable highlights; a warm rose-gold back light rims
+ * the edges so the box sits in daylight on the ivory page rather than in a nightclub.
  */
 function StudioLights({ high }: { high: boolean }) {
   return (
     <>
-      <ambientLight intensity={0.12} />
-      <directionalLight position={[5, 8, 4]} intensity={2.0} color="#FFF1D6" />
-      <directionalLight position={[-6, -1.5, -5]} intensity={3.6} color="#8B5CF6" />
-      <pointLight position={[-4, 3, 3]} intensity={0.9} color="#A78BFA" />
+      <ambientLight intensity={0.3} color="#FFF6E8" />
+      <directionalLight position={[5, 8, 4]} intensity={2.2} color="#FFF1D6" />
+      <directionalLight position={[-6, -1.5, -5]} intensity={2.8} color="#E8B999" />
+      <pointLight position={[-4, 3, 3]} intensity={0.9} color="#F3D9B8" />
       <Environment resolution={high ? 512 : 128} frames={1} environmentIntensity={0.9}>
         <Lightformer form="rect" intensity={3} color="#FFF4E0" position={[0, 6, 0]} rotation-x={Math.PI / 2} scale={[6, 6, 1]} />
         <Lightformer form="rect" intensity={5} color="#FFE8C2" position={[5, 1.5, 2.5]} target={[0, 0, 0]} scale={[1.2, 7, 1]} />
         <Lightformer form="rect" intensity={3} color="#FFFFFF" position={[-5, 1.5, 1.5]} target={[0, 0, 0]} scale={[1.2, 7, 1]} />
-        <Lightformer form="rect" intensity={4} color="#8B5CF6" position={[-2, 1, -6]} target={[0, 0, 0]} scale={[6, 3, 1]} />
+        <Lightformer form="rect" intensity={4} color="#F1DFAE" position={[-2, 1, -6]} target={[0, 0, 0]} scale={[6, 3, 1]} />
         <Lightformer form="rect" intensity={1.2} color="#FFE2A8" position={[0, -1, 6]} target={[0, 0, 0]} scale={[8, 1.5, 1]} />
         <Lightformer form="ring" intensity={2.5} color="#FFF6E5" position={[3, 4, -4]} target={[0, 0, 0]} scale={2} />
       </Environment>
@@ -1154,11 +1156,11 @@ export function MidnightBoxStage({
       </group>
       <ContactShadows
         position={[frame.box[0], -1.16, 0]}
-        opacity={0.85}
+        opacity={0.5}
         scale={7}
-        blur={2.2}
+        blur={2.6}
         far={3}
-        color="#000000"
+        color="#3C2A12"
         resolution={high ? 512 : 256}
         frames={high ? Infinity : 1}
       />
@@ -1221,28 +1223,28 @@ export default function FestoonExperience() {
 
   return (
     // A <div>, not <main>: the root layout already provides the page's <main> landmark.
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#050608] font-sans text-slate-100 select-none">
+    <div className="relative min-h-screen w-full overflow-hidden bg-dark-bg font-sans text-mist select-none">
       {/* Background Volumetric Glow Overlays */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-1/3 right-1/4 h-[500px] w-[500px] rounded-full bg-violet-600/15 blur-[140px]" />
-        <div className="absolute bottom-1/4 left-1/4 h-[400px] w-[400px] rounded-full bg-amber-500/10 blur-[120px]" />
+        <div className="absolute top-1/3 right-1/4 h-[500px] w-[500px] rounded-full bg-lavender/10 blur-[140px]" />
+        <div className="absolute bottom-1/4 left-1/4 h-[400px] w-[400px] rounded-full bg-champagne/10 blur-[120px]" />
       </div>
 
       {/* TOP FLOATING FROSTED NAVBAR */}
       <header className="fixed inset-x-0 top-4 z-50 mx-auto max-w-6xl px-4">
-        <div className="relative flex items-center justify-between rounded-2xl border border-white/10 bg-[#0D0E17]/65 px-6 py-3.5 shadow-2xl backdrop-blur-2xl">
+        <div className="relative flex items-center justify-between rounded-2xl border border-ink/10 bg-ivory/65 px-6 py-3.5 shadow-luxe backdrop-blur-2xl">
           <Link href="/" className="flex items-center gap-2">
-            <span className="font-serif text-xl font-bold tracking-tight text-white">festoon</span>
+            <span className="font-serif text-xl font-bold tracking-tight text-mist">festoon</span>
           </Link>
 
-          <nav className="hidden items-center gap-1 text-xs font-medium text-slate-400 md:flex" aria-label="Main">
+          <nav className="hidden items-center gap-1 text-xs font-medium text-mist-faint md:flex" aria-label="Main">
             {NAV.map((n) =>
               n.active ? (
-                <Link key={n.href} href={n.href} className="rounded-xl bg-white/10 px-4 py-2 font-semibold text-white shadow-inner">
+                <Link key={n.href} href={n.href} className="rounded-xl bg-ink px-4 py-2 font-semibold text-ivory shadow-inner">
                   {n.label}
                 </Link>
               ) : (
-                <Link key={n.href} href={n.href} className="px-4 py-2 transition-colors hover:text-white">
+                <Link key={n.href} href={n.href} className="px-4 py-2 transition-colors hover:text-mist">
                   {n.label}
                 </Link>
               ),
@@ -1253,9 +1255,9 @@ export default function FestoonExperience() {
             type="button"
             onClick={toggle}
             aria-pressed={isOpen}
-            className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-slate-200 shadow-sm backdrop-blur-md transition-all hover:bg-white/10 active:scale-95"
+            className="flex items-center gap-2 rounded-xl border border-ink/10 bg-ink/5 px-3.5 py-1.5 text-xs font-semibold text-mist-muted shadow-sm backdrop-blur-md transition-all hover:bg-ink/10 active:scale-95"
           >
-            {isOpen ? <EyeOff size={14} className="text-amber-400" /> : <Eye size={14} className="text-amber-400" />}
+            {isOpen ? <EyeOff size={14} className="text-champagne" /> : <Eye size={14} className="text-champagne" />}
             <span>Peek inside</span>
           </button>
         </div>
@@ -1276,27 +1278,27 @@ export default function FestoonExperience() {
       <footer className="pointer-events-none fixed inset-x-0 bottom-6 z-40 mx-auto max-w-6xl px-6">
         <div className="pointer-events-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1.5 rounded-xl border border-amber-400/30 bg-[#12131F]/80 px-3.5 py-1.5 text-xs font-medium text-amber-300/90 shadow-lg backdrop-blur-lg">
+            <span className="flex items-center gap-1.5 rounded-xl border border-champagne/30 bg-ivory/80 px-3.5 py-1.5 text-xs font-medium text-champagne shadow-lg backdrop-blur-lg">
               <span className="text-[10px]" aria-hidden>
                 ⊘
               </span>{' '}
               Eggless
             </span>
-            <span className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-[#12131F]/80 px-3.5 py-1.5 text-xs font-medium text-slate-300 backdrop-blur-lg transition-colors hover:border-emerald-500/40">
-              <span className="text-emerald-400" aria-hidden>
+            <span className="flex items-center gap-1.5 rounded-xl border border-ink/10 bg-ivory/80 px-3.5 py-1.5 text-xs font-medium text-mist-muted backdrop-blur-lg transition-colors hover:border-mint/40">
+              <span className="text-mint-300" aria-hidden>
                 🍃
               </span>{' '}
               Vegan
             </span>
-            <span className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-[#12131F]/80 px-3.5 py-1.5 text-xs font-medium text-slate-300 backdrop-blur-lg transition-colors hover:border-amber-500/40">
-              <span className="text-amber-400" aria-hidden>
+            <span className="flex items-center gap-1.5 rounded-xl border border-ink/10 bg-ivory/80 px-3.5 py-1.5 text-xs font-medium text-mist-muted backdrop-blur-lg transition-colors hover:border-champagne/40">
+              <span className="text-champagne" aria-hidden>
                 🌾
               </span>{' '}
               Gluten-free
             </span>
           </div>
 
-          <div className="hidden items-center gap-2 rounded-full border border-white/5 bg-[#12131F]/60 px-4 py-1.5 text-xs font-medium text-slate-400 backdrop-blur-md sm:flex">
+          <div className="hidden items-center gap-2 rounded-full border border-ink/5 bg-ivory/60 px-4 py-1.5 text-xs font-medium text-mist-faint backdrop-blur-md sm:flex">
             <span>Drag to rotate • tap the box or &quot;Peek inside&quot; to open it</span>
           </div>
         </div>

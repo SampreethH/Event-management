@@ -16,13 +16,13 @@ function Row({ words, outline }: { words: string[]; outline?: boolean }) {
           <span
             className={
               outline
-                ? "text-transparent [-webkit-text-stroke:1.5px_rgba(245,208,97,0.75)]"
-                : "bg-gradient-to-b from-mist to-[#B4BCCB] bg-clip-text text-transparent"
+                ? "text-transparent [-webkit-text-stroke:1.5px_rgba(138,100,39,0.75)]"
+                : "bg-gradient-to-b from-mist to-mist-muted bg-clip-text text-transparent"
             }
           >
             {w}
           </span>
-          <span className="inline-block size-[0.16em] rotate-45 bg-celebration-gold shadow-[0_0_18px_rgba(245,208,97,0.8)]" aria-hidden />
+          <span className="inline-block size-[0.16em] rotate-45 bg-celebration-gold shadow-[0_0_18px_rgba(138,100,39,0.8)]" aria-hidden />
         </span>
       ))}
     </div>
@@ -40,7 +40,7 @@ export function WordSweep() {
   return (
     <section ref={ref} aria-label="Build, pack, celebrate" className="relative overflow-hidden pt-28 pb-6 sm:pt-36">
       <h2 className="sr-only">Build. Pack. Celebrate.</h2>
-      <div aria-hidden className="font-display text-[clamp(3.6rem,11vw,10.5rem)] leading-[0.95] font-bold tracking-tight uppercase select-none">
+      <div aria-hidden className="font-display text-[clamp(3.6rem,11vw,10.5rem)] leading-[0.95] font-semibold tracking-tight uppercase select-none">
         <motion.div style={{ x: still ? 0 : left }}>
           <Row words={SOLID} />
         </motion.div>

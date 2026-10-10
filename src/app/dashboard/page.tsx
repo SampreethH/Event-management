@@ -35,14 +35,14 @@ export default async function DashboardPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-champagne/80">My celebrations</p>
-          <h1 className="mt-2 font-display text-5xl font-bold">{upcoming.length ? `${upcoming.length} coming up` : "Nothing planned yet"}</h1>
+          <h1 className="mt-2 font-display text-5xl font-semibold">{upcoming.length ? `${upcoming.length} coming up` : "Nothing planned yet"}</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Link href="/dashboard/security" className="rounded-full px-4 py-2 text-sm text-mist-muted hover:bg-white/5 hover:text-mist">
+          <Link href="/dashboard/security" className="rounded-full px-4 py-2 text-sm text-mist-muted hover:bg-ink/5 hover:text-mist">
             Security {user.factors.includes("totp") ? "· 2FA on" : ""}
           </Link>
           {user.role !== "CUSTOMER" && (
-            <Link href="/admin" className="rounded-full px-4 py-2 text-sm text-lavender-300 hover:bg-white/5">
+            <Link href="/admin" className="rounded-full px-4 py-2 text-sm text-lavender-300 hover:bg-ink/5">
               Ops portal
             </Link>
           )}

@@ -9,7 +9,7 @@ import { SceneBoundary } from "./SceneBoundary";
 
 const LuxuryPartyBoxScene = dynamic(() => import("./LuxuryPartyBoxScene"), {
   ssr: false,
-  loading: () => <div className="h-full w-full animate-pulse bg-white/[0.02]" />,
+  loading: () => <div className="h-full w-full animate-pulse bg-ink/[0.02]" />,
 });
 
 const DEFAULT_ITEMS: PreviewItem[] = [
@@ -90,7 +90,7 @@ export default function LuxuryPartyBox({
     <div
       ref={container}
       className={cn(
-        "relative h-[600px] w-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#0F1017] via-[#050608] to-[#050608]",
+        "relative h-[600px] w-full overflow-hidden rounded-2xl border border-ink/10 bg-gradient-to-b from-ivory via-dark-bg to-dark-bg",
         className,
       )}
     >
@@ -99,7 +99,7 @@ export default function LuxuryPartyBox({
           type="button"
           onClick={toggle}
           aria-pressed={open}
-          className="rounded-full border border-champagne/30 bg-white/5 px-4 py-2 font-sub text-xs font-semibold tracking-wider text-champagne uppercase shadow-lg backdrop-blur-md transition-all hover:bg-champagne/10"
+          className="rounded-full border border-champagne/30 bg-ink/5 px-4 py-2 font-sub text-xs font-semibold tracking-wider text-champagne uppercase shadow-lg backdrop-blur-md transition-all hover:bg-champagne/10"
         >
           {open ? "Close lid" : "Peek inside"}
         </button>
@@ -141,7 +141,7 @@ function StaticBox({ boxColor, ribbonColor, label, open }: { boxColor: string; r
         <div className="absolute inset-x-0 top-[14%] bottom-0 rounded-lg shadow-2xl" style={{ background: `linear-gradient(160deg, ${boxColor}, #000 140%)` }}>
           <div className="absolute inset-y-0 left-1/2 w-[15%] -translate-x-1/2" style={{ background: ribbonColor }} />
           {label && (
-            <p className="absolute inset-x-3 bottom-[18%] truncate rounded bg-black/50 px-2 py-1 text-center font-display text-sm font-bold" style={{ color: ribbonColor }}>
+            <p className="absolute inset-x-3 bottom-[18%] truncate rounded bg-black/50 px-2 py-1 text-center font-display text-sm font-semibold" style={{ color: ribbonColor }}>
               {label}
             </p>
           )}

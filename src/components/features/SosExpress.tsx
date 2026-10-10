@@ -100,10 +100,10 @@ export function SosExpress() {
             aria-pressed={kitId === k.id}
             className={cn(
               "glass grain relative flex items-center gap-4 rounded-glass p-5 text-left transition-all",
-              kitId === k.id ? "border-tangerine/70! shadow-glow-coral" : "hover:border-white/25",
+              kitId === k.id ? "border-tangerine/70! shadow-glow-coral" : "hover:border-ink/25",
             )}
           >
-            <span className={cn("grid size-12 shrink-0 place-items-center rounded-2xl", kitId === k.id ? "bg-tangerine text-white" : "bg-white/5 text-tangerine")}>
+            <span className={cn("grid size-12 shrink-0 place-items-center rounded-2xl", kitId === k.id ? "bg-tangerine text-white" : "bg-ink/5 text-tangerine")}>
               <Zap className="size-6" />
             </span>
             <span className="min-w-0 flex-1">
@@ -111,7 +111,7 @@ export function SosExpress() {
               <span className="block text-sm text-mist-muted">{k.pitch}</span>
             </span>
             <span className="text-right">
-              <span className="block font-display text-xl font-bold tabular-nums">{k.boxes}</span>
+              <span className="block font-display text-xl font-semibold tabular-nums">{k.boxes}</span>
               <span className="text-xs text-mist-faint">boxes</span>
             </span>
           </button>
@@ -126,7 +126,7 @@ export function SosExpress() {
           </span>
           Live dispatch
         </div>
-        <p className="mt-3 font-display text-3xl font-bold">60–90 min to your door</p>
+        <p className="mt-3 font-display text-3xl font-semibold">60–90 min to your door</p>
 
         <form
           className="mt-6 flex gap-2"
@@ -166,7 +166,7 @@ export function SosExpress() {
               <dl className="space-y-1 text-sm text-mist-muted">
                 <div className="flex justify-between">
                   <dt>Kit + express fee + GST</dt>
-                  <dd className="font-display text-lg font-bold text-mist tabular-nums">{formatPaise(quote.total)}</dd>
+                  <dd className="font-display text-lg font-semibold text-mist tabular-nums">{formatPaise(quote.total)}</dd>
                 </div>
               </dl>
               <Button variant="coral" size="lg" className="w-full" onClick={book}>
@@ -175,7 +175,7 @@ export function SosExpress() {
             </motion.div>
           )}
           {availability && !availability.ok && availability.reason && (
-            <motion.p key="no" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-6 flex gap-2 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-mist-muted">
+            <motion.p key="no" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-6 flex gap-2 rounded-2xl border border-ink/10 bg-ink/[0.05] p-4 text-sm text-mist-muted">
               <CircleAlert className="mt-0.5 size-4 shrink-0 text-tangerine" />
               {REASONS[availability.reason]}
             </motion.p>
@@ -193,7 +193,7 @@ export function SosExpress() {
 
 function Stat({ icon, k, v, hot }: { icon: React.ReactNode; k: string; v: string; hot?: boolean }) {
   return (
-    <div className={cn("rounded-2xl border p-3", hot ? "border-tangerine/40 bg-tangerine/10" : "border-white/10 bg-white/[0.03]")}>
+    <div className={cn("rounded-2xl border p-3", hot ? "border-tangerine/40 bg-tangerine/10" : "border-ink/10 bg-ink/[0.03]")}>
       <p className="flex items-center gap-1.5 text-xs text-mist-faint">
         {icon}
         {k}
