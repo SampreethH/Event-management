@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
 import { detectQuality, mulberry32, subscribeNoop } from '@/components/three/capability';
 import { SceneBoundary } from '@/components/three/SceneBoundary';
+import { FINISHES, type SleeveFinish } from '@/components/three/finishes';
 
 type Quality = 'high' | 'low';
 
@@ -36,13 +37,16 @@ const LID_OPEN = { y: H + LT + 1.05, z: -0.5, rx: -0.72, rz: 0.06 };
 // ==========================================
 type Painter = (ctx: CanvasRenderingContext2D, w: number, h: number) => void;
 
-/** Paints into a canvas texture; repaints once web fonts are ready so foil lettering uses the brand faces. */
+/**
+ * Paints into a canvas texture; repaints once web fonts are ready so foil lettering uses the brand faces.
+ * The texture object is stable across `paint` changes (a new painter just repaints the same canvas),
+ * so materials holding it don't have to be rebuilt.
+ */
 function useCanvasTexture(paint: Painter, w: number, h: number, srgb: boolean, repeat = 1) {
   const tex = useMemo(() => {
     const c = document.createElement('canvas');
     c.width = w;
     c.height = h;
-    paint(c.getContext('2d')!, w, h);
     const t = new THREE.CanvasTexture(c);
     if (srgb) t.colorSpace = THREE.SRGBColorSpace;
     if (repeat !== 1) {
@@ -51,20 +55,23 @@ function useCanvasTexture(paint: Painter, w: number, h: number, srgb: boolean, r
     }
     t.anisotropy = 8;
     return t;
-  }, [paint, w, h, srgb, repeat]);
+  }, [w, h, srgb, repeat]);
 
   useEffect(() => {
     let live = true;
-    document.fonts?.ready.then(() => {
-      if (!live) return;
+    const draw = () => {
       paint((tex.image as HTMLCanvasElement).getContext('2d')!, w, h);
       tex.needsUpdate = true;
-    });
+    };
+    // Paint on the next microtask (before the next frame), then again once brand fonts are ready.
+    Promise.resolve().then(() => live && draw());
+    document.fonts?.ready.then(() => live && draw());
     return () => {
       live = false;
-      tex.dispose();
     };
   }, [tex, paint, w, h]);
+
+  useEffect(() => () => tex.dispose(), [tex]);
 
   return tex;
 }
@@ -127,50 +134,52 @@ const paintConfettiDense = makeConfettiPrint(7, 300);
 const paintConfettiSparse = makeConfettiPrint(19, 170);
 
 /** Front-face foil stamp: double frame, wordmark, rule and sub-line. */
-const paintWordmark: Painter = (ctx, w, h) => {
-  const css = getComputedStyle(document.documentElement);
-  const display = css.getPropertyValue('--font-clash').trim() || 'serif';
-  const body = css.getPropertyValue('--font-satoshi').trim() || 'sans-serif';
-  ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, w, h);
-  ctx.fillStyle = '#fff';
-  ctx.strokeStyle = '#fff';
+const makeWordmark =
+  (label: string): Painter =>
+  (ctx, w, h) => {
+    const css = getComputedStyle(document.documentElement);
+    const display = css.getPropertyValue('--font-clash').trim() || 'serif';
+    const body = css.getPropertyValue('--font-satoshi').trim() || 'sans-serif';
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = '#fff';
 
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.roundRect(22, 22, w - 44, h - 44, 18);
-  ctx.stroke();
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.roundRect(38, 38, w - 76, h - 76, 10);
-  ctx.stroke();
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.roundRect(22, 22, w - 44, h - 44, 18);
+    ctx.stroke();
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(38, 38, w - 76, h - 76, 10);
+    ctx.stroke();
 
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.font = `600 150px ${display}`;
-  ctx.letterSpacing = '6px';
-  ctx.fillText('festoon', w / 2 + 3, h * 0.42);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `600 150px ${display}`;
+    ctx.letterSpacing = '6px';
+    ctx.fillText('festoon', w / 2 + 3, h * 0.42);
 
-  const y = h * 0.64;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(w / 2 - 170, y);
-  ctx.lineTo(w / 2 - 22, y);
-  ctx.moveTo(w / 2 + 22, y);
-  ctx.lineTo(w / 2 + 170, y);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(w / 2, y - 9);
-  ctx.lineTo(w / 2 + 9, y);
-  ctx.lineTo(w / 2, y + 9);
-  ctx.lineTo(w / 2 - 9, y);
-  ctx.closePath();
-  ctx.fill();
+    const y = h * 0.64;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(w / 2 - 170, y);
+    ctx.lineTo(w / 2 - 22, y);
+    ctx.moveTo(w / 2 + 22, y);
+    ctx.lineTo(w / 2 + 170, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(w / 2, y - 9);
+    ctx.lineTo(w / 2 + 9, y);
+    ctx.lineTo(w / 2, y + 9);
+    ctx.lineTo(w / 2 - 9, y);
+    ctx.closePath();
+    ctx.fill();
 
-  ctx.font = `500 36px ${body}`;
-  ctx.letterSpacing = '14px';
-  ctx.fillText('MIDNIGHT FOIL', w / 2 + 7, h * 0.78);
-};
+    ctx.font = `500 36px ${body}`;
+    ctx.letterSpacing = '14px';
+    ctx.fillText(label, w / 2 + 7, h * 0.78);
+  };
 
 /** Soft violet-and-gold pool of light on the floor under the box. */
 const paintFloorGlow: Painter = (ctx, w, h) => {
@@ -268,12 +277,13 @@ function useRibbonTail(length: number, width: number) {
 // ==========================================
 // 4. MATERIALS
 // ==========================================
-function useMaterials() {
+function useMaterials(finish: SleeveFinish = 'midnight') {
   const grain = useCanvasTexture(paintGrain, 256, 256, false, 6);
   const printDense = useCanvasTexture(paintConfettiDense, 1024, 1024, false);
   const printSparse = useCanvasTexture(paintConfettiSparse, 1024, 640, false);
   const printStrip = useCanvasTexture(paintConfettiSparse, 1024, 160, false);
-  const wordmark = useCanvasTexture(paintWordmark, 1024, 512, false);
+  const paintLabel = useMemo(() => makeWordmark(FINISHES[finish].label), [finish]);
+  const wordmark = useCanvasTexture(paintLabel, 1024, 512, false);
 
   const mats = useMemo(() => {
     // Obsidian soft-touch board with a faint violet velvet sheen at grazing angles.
@@ -346,7 +356,40 @@ function useMaterials() {
     };
   }, [grain, printDense, printSparse, printStrip, wordmark]);
 
+  // Ease every finish-dependent colour toward the chosen sleeve, and re-foil the sub-line.
+  const spec = FINISHES[finish];
+  const goal = useMemo(
+    () => ({
+      board: new THREE.Color(spec.board),
+      sheen: new THREE.Color(spec.sheen),
+      foil: new THREE.Color(spec.foil),
+      emissive: new THREE.Color(spec.emissive),
+      satin: new THREE.Color(spec.satin),
+      velvet: new THREE.Color(spec.velvet),
+      velvetSheen: new THREE.Color(spec.velvetSheen),
+      tissue: new THREE.Color(spec.tissue),
+    }),
+    [spec],
+  );
+
+  useFrame((_, delta) => {
+    const a = 1 - Math.exp(-6 * Math.min(delta, 0.05));
+    mats.board.color.lerp(goal.board, a);
+    mats.board.sheenColor.lerp(goal.sheen, a);
+    mats.foil.color.lerp(goal.foil, a);
+    for (const m of [mats.printDense, mats.printSparse, mats.printStrip, mats.wordmark]) {
+      m.color.lerp(goal.foil, a);
+      m.emissive.lerp(goal.emissive, a);
+      m.emissiveIntensity = THREE.MathUtils.lerp(m.emissiveIntensity, spec.emissiveIntensity, a);
+    }
+    mats.satin.color.lerp(goal.satin, a);
+    mats.velvet.color.lerp(goal.velvet, a);
+    mats.velvet.sheenColor.lerp(goal.velvetSheen, a);
+    mats.tissue.color.lerp(goal.tissue, a);
+  });
+
   useEffect(() => () => Object.values(mats).forEach((m) => m.dispose()), [mats]);
+
   return mats;
 }
 
@@ -436,7 +479,8 @@ function Present({ satin, size = 0.42 }: { satin: THREE.Material; size?: number 
   );
 }
 
-function FloatingTreats({ isOpen, mats }: { isOpen: boolean; mats: Mats }) {
+/** `amount` is the lid's displayed open fraction (0 closed, 1 fully lifted); treats rise with it. */
+function FloatingTreats({ amount, mats }: { amount: React.RefObject<number>; mats: Mats }) {
   const groupRef = useRef<THREE.Group>(null);
   const target = useMemo(() => new THREE.Vector3(), []);
 
@@ -444,9 +488,10 @@ function FloatingTreats({ isOpen, mats }: { isOpen: boolean; mats: Mats }) {
     const g = groupRef.current;
     if (!g) return;
     const d = Math.min(delta, 0.05);
-    const s = isOpen ? 1 : 0.001;
-    g.scale.lerp(target.set(s, s, s), Math.min(1, d * 4));
-    g.position.y = THREE.MathUtils.damp(g.position.y, isOpen ? H - 0.25 : H * 0.3, 3.5, d);
+    const rise = THREE.MathUtils.smoothstep(amount.current ?? 0, 0.3, 0.95);
+    const s = Math.max(0.001, rise);
+    g.scale.lerp(target.set(s, s, s), Math.min(1, d * 6));
+    g.position.y = THREE.MathUtils.damp(g.position.y, THREE.MathUtils.lerp(H * 0.3, H - 0.25, rise), 5, d);
   });
 
   return (
@@ -536,9 +581,21 @@ function Bow({ mats }: { mats: Mats }) {
   );
 }
 
-function LuxuryMidnightBox({ isOpen, onToggle }: { isOpen: boolean; onToggle: () => void }) {
-  const mats = useMaterials();
+function LuxuryMidnightBox({
+  isOpen,
+  onToggle,
+  openRef,
+  finish = 'midnight',
+}: {
+  isOpen: boolean;
+  onToggle: () => void;
+  /** When set, the lid follows this 0–1 value (scroll-linked) instead of the boolean. */
+  openRef?: React.RefObject<number>;
+  finish?: SleeveFinish;
+}) {
+  const mats = useMaterials(finish);
   const lid = useRef<THREE.Group>(null);
+  const amount = useRef(isOpen ? 1 : 0);
 
   const baseShell = useShell(W, W, R, H, T, B);
   const baseFloor = useShell(W - 2 * T + 0.004, W - 2 * T + 0.004, R - T, T, 0, 0);
@@ -551,14 +608,18 @@ function LuxuryMidnightBox({ isOpen, onToggle }: { isOpen: boolean; onToggle: ()
   const lidPiping = useShell(LW + 0.012, LW + 0.012, R + 0.041, 0.03, 0.03, 0.006);
 
   useFrame((_, delta) => {
+    const d = Math.min(delta, 0.05);
+    const scrubbed = openRef != null && openRef.current != null;
+    const goal = scrubbed ? openRef.current! : isOpen ? 1 : 0;
+    // Scroll-linked: a quick follow so the lid tracks the wheel; tapped: the original slow ease.
+    amount.current = THREE.MathUtils.damp(amount.current, goal, scrubbed ? 9 : 4, d);
     const l = lid.current;
     if (!l) return;
-    const d = Math.min(delta, 0.05);
-    const to = isOpen ? LID_OPEN : LID_CLOSED;
-    l.position.y = THREE.MathUtils.damp(l.position.y, to.y, 4, d);
-    l.position.z = THREE.MathUtils.damp(l.position.z, to.z, 4, d);
-    l.rotation.x = THREE.MathUtils.damp(l.rotation.x, to.rx, 4, d);
-    l.rotation.z = THREE.MathUtils.damp(l.rotation.z, to.rz, 4, d);
+    const t = amount.current;
+    l.position.y = THREE.MathUtils.lerp(LID_CLOSED.y, LID_OPEN.y, t);
+    l.position.z = THREE.MathUtils.lerp(LID_CLOSED.z, LID_OPEN.z, t);
+    l.rotation.x = THREE.MathUtils.lerp(LID_CLOSED.rx, LID_OPEN.rx, t);
+    l.rotation.z = THREE.MathUtils.lerp(LID_CLOSED.rz, LID_OPEN.rz, t);
   });
 
   const click = (e: ThreeEvent<MouseEvent>) => {
@@ -598,7 +659,7 @@ function LuxuryMidnightBox({ isOpen, onToggle }: { isOpen: boolean; onToggle: ()
       ))}
 
       <Tissue material={mats.tissue} />
-      <FloatingTreats isOpen={isOpen} mats={mats} />
+      <FloatingTreats amount={amount} mats={mats} />
 
       {/* --- LID (origin at its top surface) --- */}
       <group ref={lid} position={[0, LID_CLOSED.y, 0]}>
@@ -875,6 +936,16 @@ export type MidnightBoxStageProps = {
   framing?: 'center' | 'right';
   /** Authored camera + yaw for the homepage scroll film. Omit on /experience. */
   shot?: LandingShot;
+  /**
+   * Continuous scroll film: `progress` is the fractional beat index (0 … shots.length - 1), so the
+   * camera and yaw glide between authored shots as the page scrolls instead of jumping per beat.
+   */
+  track?: { progress: React.RefObject<number>; shots: LandingShot[] };
+  /** Scroll-linked lid, 0 closed to 1 lifted. Overrides `isOpen` for the lid while set. */
+  openRef?: React.RefObject<number>;
+  /** The box turns and tilts toward the cursor (or device tilt on phones). */
+  follow?: boolean;
+  finish?: SleeveFinish;
 };
 
 const FRAMING = {
@@ -882,22 +953,82 @@ const FRAMING = {
   right: { camera: [0.35, 2.15, 6.6] as [number, number, number], target: [1.55, -0.2, 0] as [number, number, number], box: [1.35, -1.15, 0] as [number, number, number] },
 };
 
-/** yawOffset is added to the angle that points the foil wordmark at the camera. */
-const SHOT: Record<LandingShot, { yawOffset: number; zoom: number; lookY: number; fov: number }> = {
-  arrive: { yawOffset: 2.05, zoom: 1, lookY: -0.12, fov: 42 },
-  logo: { yawOffset: 0, zoom: 0.88, lookY: -0.22, fov: 36 },
+/**
+ * yawOffset is added to the angle that points the foil wordmark at the camera.
+ * follow scales how far the box turns toward the cursor; it stays low on the logo shots so the stamp reads.
+ */
+type Pose = { yawOffset: number; zoom: number; lookY: number; fov: number; follow: number };
+const SHOT: Record<LandingShot, Pose> = {
+  arrive: { yawOffset: 2.05, zoom: 1, lookY: -0.12, fov: 42, follow: 1 },
+  logo: { yawOffset: 0, zoom: 0.88, lookY: -0.22, fov: 36, follow: 0.35 },
   // Modest lean-in: keep the full foil stamp (frame, wordmark, rule, diamond, sub-line) in frame.
-  zoom: { yawOffset: 0, zoom: 0.78, lookY: -0.28, fov: 35 },
-  unveil: { yawOffset: 0.38, zoom: 0.82, lookY: 0.22, fov: 40 },
-  wide: { yawOffset: 0.32, zoom: 1, lookY: -0.05, fov: 42 },
+  zoom: { yawOffset: 0, zoom: 0.78, lookY: -0.28, fov: 35, follow: 0.2 },
+  unveil: { yawOffset: 0.38, zoom: 0.82, lookY: 0.22, fov: 40, follow: 0.6 },
+  wide: { yawOffset: 0.32, zoom: 1, lookY: -0.05, fov: 42, follow: 0.8 },
 };
 
+/** Blends two neighbouring shots; each beat holds for a moment around its centre before the glide. */
+function blendPose(shots: LandingShot[], f: number, out: Pose): Pose {
+  const n = shots.length;
+  const c = THREE.MathUtils.clamp(f, 0, n - 1);
+  const i = Math.min(Math.floor(c), Math.max(0, n - 2));
+  const a = SHOT[shots[i]!];
+  const b = SHOT[shots[Math.min(i + 1, n - 1)]!];
+  const t = THREE.MathUtils.smoothstep(c - i, 0.15, 0.85);
+  out.yawOffset = THREE.MathUtils.lerp(a.yawOffset, b.yawOffset, t);
+  out.zoom = THREE.MathUtils.lerp(a.zoom, b.zoom, t);
+  out.lookY = THREE.MathUtils.lerp(a.lookY, b.lookY, t);
+  out.fov = THREE.MathUtils.lerp(a.fov, b.fov, t);
+  out.follow = THREE.MathUtils.lerp(a.follow, b.follow, t);
+  return out;
+}
+
+type PoseSource = { shot?: LandingShot; track?: MidnightBoxStageProps['track'] };
+
+/** Current pose for either a fixed shot or the continuous scroll track. */
+function usePose({ shot, track }: PoseSource) {
+  const scratch = useMemo<Pose>(() => ({ ...SHOT.wide }), []);
+  return () => (track ? blendPose(track.shots, track.progress.current ?? 0, scratch) : SHOT[shot ?? 'wide']);
+}
+
+/** Normalised pointer (-1…1, y up) from the mouse, or from device tilt on touch screens. */
+function usePointerFollow(enabled: boolean) {
+  const p = useRef({ x: 0, y: 0 });
+  useEffect(() => {
+    if (!enabled) {
+      p.current.x = p.current.y = 0;
+      return;
+    }
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+      p.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      p.current.y = -((e.clientY / window.innerHeight) * 2 - 1);
+    };
+    // Android reports tilt freely; iOS needs a permission prompt, so it simply stays still there.
+    const onTilt = (e: DeviceOrientationEvent) => {
+      if (e.gamma == null || e.beta == null) return;
+      p.current.x = THREE.MathUtils.clamp(e.gamma / 30, -1, 1);
+      p.current.y = THREE.MathUtils.clamp(-(e.beta - 45) / 30, -1, 1);
+    };
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    window.addEventListener('pointermove', onMove, { passive: true });
+    if (coarse) window.addEventListener('deviceorientation', onTilt, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('deviceorientation', onTilt);
+    };
+  }, [enabled]);
+  return p;
+}
+
 function DirectedBox({
-  yawOffset,
+  pose,
+  pointer,
   position,
   children,
 }: {
-  yawOffset: number;
+  pose: () => Pose;
+  pointer: React.RefObject<{ x: number; y: number }>;
   position: [number, number, number];
   children: React.ReactNode;
 }) {
@@ -908,14 +1039,19 @@ function DirectedBox({
   useFrame((_, dt) => {
     const g = ref.current;
     if (!g) return;
+    const { yawOffset, follow } = pose();
     const faceCam = Math.atan2(camera.position.x - position[0], camera.position.z - position[2]);
-    const target = faceCam + yawOffset;
+    const px = pointer.current?.x ?? 0;
+    const py = pointer.current?.y ?? 0;
+    const target = faceCam + yawOffset + px * 0.45 * follow;
     if (!primed.current) {
       g.rotation.y = target;
       primed.current = true;
       return;
     }
-    g.rotation.y = THREE.MathUtils.damp(g.rotation.y, target, 2.5, Math.min(dt, 0.05));
+    const d = Math.min(dt, 0.05);
+    g.rotation.y = THREE.MathUtils.damp(g.rotation.y, target, 2.5, d);
+    g.rotation.x = THREE.MathUtils.damp(g.rotation.x, -py * 0.16 * follow, 3, d);
   });
 
   return (
@@ -925,8 +1061,7 @@ function DirectedBox({
   );
 }
 
-function CameraDirector({ shot, framing }: { shot: LandingShot; framing: 'center' | 'right' }) {
-  const pose = SHOT[shot];
+function CameraDirector({ pose: getPose, framing, scrubbed }: { pose: () => Pose; framing: 'center' | 'right'; scrubbed: boolean }) {
   const frame = FRAMING[framing];
   const home = useMemo(() => new THREE.Vector3(...frame.camera), [frame]);
   const target = useMemo(() => new THREE.Vector3(...frame.target), [frame]);
@@ -936,13 +1071,16 @@ function CameraDirector({ shot, framing }: { shot: LandingShot; framing: 'center
   useFrame((state, dt) => {
     const camera = state.camera as THREE.PerspectiveCamera;
     const d = Math.min(dt, 0.05);
+    const pose = getPose();
+    // The scroll track already eases between shots, so follow it more tightly.
+    const k = scrubbed ? 5 : 2.4;
     desired.copy(home).sub(target).multiplyScalar(pose.zoom).add(target);
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, desired.x, 2.4, d);
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, desired.y, 2.4, d);
-    camera.position.z = THREE.MathUtils.damp(camera.position.z, desired.z, 2.4, d);
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, desired.x, k, d);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, desired.y, k, d);
+    camera.position.z = THREE.MathUtils.damp(camera.position.z, desired.z, k, d);
     look.set(target.x, pose.lookY, target.z);
     camera.lookAt(look);
-    camera.fov = THREE.MathUtils.damp(camera.fov, pose.fov, 2.4, d);
+    camera.fov = THREE.MathUtils.damp(camera.fov, pose.fov, k, d);
     camera.updateProjectionMatrix();
   });
 
@@ -959,11 +1097,17 @@ export function MidnightBoxStage({
   enableZoom = true,
   framing = 'center',
   shot,
+  track,
+  openRef,
+  follow = false,
+  finish = 'midnight',
 }: MidnightBoxStageProps) {
   const [quality, setQuality] = useState(initial);
   const high = quality === 'high';
   const frame = FRAMING[framing];
-  const pose = shot ? SHOT[shot] : null;
+  const directed = Boolean(shot || track);
+  const pose = usePose({ shot, track });
+  const pointer = usePointerFollow(follow && directed);
   const tight = shot === 'zoom';
 
   return (
@@ -984,7 +1128,7 @@ export function MidnightBoxStage({
       <AdaptiveDpr pixelated={false} />
       <StudioLights high={high} />
 
-      {shot && <CameraDirector shot={shot} framing={framing} />}
+      {directed && <CameraDirector pose={pose} framing={framing} scrubbed={Boolean(track)} />}
 
       <Float
         speed={tight ? 0.6 : 1.4}
@@ -992,14 +1136,14 @@ export function MidnightBoxStage({
         floatIntensity={tight ? 0.06 : 0.2}
         floatingRange={tight ? [-0.01, 0.01] : [-0.04, 0.04]}
       >
-        {pose ? (
-          <DirectedBox yawOffset={pose.yawOffset} position={frame.box}>
-            <LuxuryMidnightBox isOpen={isOpen} onToggle={onToggle} />
+        {directed ? (
+          <DirectedBox pose={pose} pointer={pointer} position={frame.box}>
+            <LuxuryMidnightBox isOpen={isOpen} onToggle={onToggle} openRef={openRef} finish={finish} />
             <PopperBurst fire={burst} count={high ? 160 : 70} />
           </DirectedBox>
         ) : (
           <group position={frame.box}>
-            <LuxuryMidnightBox isOpen={isOpen} onToggle={onToggle} />
+            <LuxuryMidnightBox isOpen={isOpen} onToggle={onToggle} finish={finish} />
             <PopperBurst fire={burst} count={high ? 160 : 70} />
           </group>
         )}
@@ -1021,7 +1165,7 @@ export function MidnightBoxStage({
 
       <ScreenConfetti count={high ? 240 : 110} />
 
-      {!shot && (
+      {!directed && (
         <OrbitControls
           target={frame.target}
           enablePan={false}

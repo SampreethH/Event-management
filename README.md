@@ -58,7 +58,7 @@ src/
   proxy.ts                 CSRF origin check + route gating (Next 16 "middleware")
   app/
     page.tsx               landing: 3D hero, features, inline calculator
-    build/ sos/ plan/ decor/   feature pages
+    build/ sos/ plan/ decor/   feature pages (build = BoxBuilder, decor = DecorScrub + visualizer)
     checkout/ login/ pay/[token]/
     dashboard/             My celebrations, order detail, 2FA settings
     admin/                 ops portal (pipeline, inventory, decorator calendar) + server actions
@@ -99,6 +99,26 @@ src/app/globals.css        Glass OS utilities: glass, glass-strong, glass-prism,
 - **SOS express.** PIN code → `ServiceZone` geofence → opening hours and cutoff → per-item `ZoneStock`. Stock is reserved with conditional decrements inside the order transaction, so two orders can't take the last kit. These orders get `priority=10` in the packing queue.
 - **WhatsApp Direct-Sync.** `encodeConciergeLink()` builds a structured brief and strips WhatsApp formatting characters from user text. It falls back from full → compact → minimal detail to keep the URL under 3,800 characters.
 - **Split-pay.** Only the SHA-256 of the share token is stored. Guests see the event and progress but no address or contact details. The order moves to `NEW` once the link is fully funded.
+
+- **Landing film.** The hero box is scroll-linked: `CinematicHome` turns scroll position into a fractional beat index, the camera and yaw blend between authored shots (`blendPose`), and the lid lifts and closes with the page. A tap on the box overrides the scroll until the reader moves on. The box turns toward the cursor (or follows device tilt on Android). The sleeve picker re-skins the box in place (`components/three/finishes.ts`, one look per catalog sleeve) and preselects that sleeve in the builder.
+- **Landing sections.** `FoilDrip` (scroll-grown foil drips), `WordSweep` (giant counter-sliding type), `OccasionSwitcher` (tabs that swap photo, copy, suggested box and glow) and `MomentsCollage` (polaroids that drop in; swipeable row on mobile).
+- **Decor scrub.** `/decor` opens with `DecorScrub`: a clip that plays forward and back with scroll. Clips are encoded with a keyframe every 3 frames for smooth seeking, VP9 WebM first (open-source Chromium lacks H.264), MP4 for Safari.
+
+## Media credits
+
+Placeholder media is free for commercial use and needs no attribution, but replace it with real Festoon photos and footage before launch:
+
+- `public/media/moments/*`, `public/media/occasions/*`: Unsplash (Unsplash licence).
+- `public/media/decor/*`: Pexels video 7119576 (Pexels licence).
+
+To re-encode a replacement decor clip:
+
+```bash
+ffmpeg -i in.mp4 -an -vf scale=1280:-2,fps=25 -c:v libvpx-vp9 -b:v 0 -crf 45 -g 3 -keyint_min 3 public/media/decor/decorating.webm
+ffmpeg -i in.mp4 -an -vf scale=1280:-2,fps=25,format=yuv420p -c:v libx264 -crf 27 -g 3 -keyint_min 3 -sc_threshold 0 -movflags +faststart public/media/decor/decorating.mp4
+```
+
+(Repeat with `scale=720:-2` for the `-720` mobile versions.)
 
 ## Before going live
 

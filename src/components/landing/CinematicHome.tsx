@@ -8,7 +8,13 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { detectQuality, subscribeNoop } from "@/components/three/capability";
 import { SceneBoundary } from "@/components/three/SceneBoundary";
+import { FINISHES, type SleeveFinish } from "@/components/three/finishes";
 import { FeatureShowcase } from "@/components/landing/FeatureShowcase";
+import { FinishPicker } from "@/components/landing/FinishPicker";
+import { FoilDrip } from "@/components/landing/FoilDrip";
+import { WordSweep } from "@/components/landing/WordSweep";
+import { OccasionSwitcher } from "@/components/landing/OccasionSwitcher";
+import { MomentsCollage } from "@/components/landing/MomentsCollage";
 import { PartyCalculator } from "@/components/features/PartyCalculator";
 import { ButtonLink } from "@/components/ui/Button";
 import { Glass } from "@/components/ui/Glass";
@@ -109,6 +115,19 @@ const BEATS: Beat[] = [
     secondary: { href: "/decor", label: "Preview décor" },
   },
 ];
+
+const SHOTS = BEATS.map((b) => b.shot);
+const OPEN = BEATS.map((b) => (b.open ? 1 : 0));
+
+/** Lid position for a fractional beat: holds each beat's state, then lifts or closes across the gap. */
+function openAt(f: number) {
+  const c = Math.min(Math.max(f, 0), BEATS.length - 1);
+  const i = Math.min(Math.floor(c), BEATS.length - 2);
+  const t = c - i;
+  const s = Math.min(Math.max((t - 0.3) / 0.6, 0), 1);
+  const e = s * s * (3 - 2 * s);
+  return OPEN[i]! + (OPEN[i + 1]! - OPEN[i]!) * e;
+}
 
 function StaticBox() {
   return (
@@ -220,6 +239,12 @@ export function CinematicHome() {
   const chapterRefs = useRef<(HTMLElement | null)[]>([]);
   const lastOpen = useRef(false);
   const indexRef = useRef(0);
+  // Fractional beat index driven by scroll (0 … BEATS.length - 1) and the lid it implies.
+  const progress = useRef(0);
+  const openAmount = useRef(0);
+  // A tap on the box wins over the scroll track until the reader scrolls on a little.
+  const manual = useRef<{ open: boolean; at: number } | null>(null);
+  const [finish, setFinish] = useState<SleeveFinish>("midnight");
   const wide = useSyncExternalStore(
     (onChange) => {
       const mq = window.matchMedia("(min-width: 1024px)");
@@ -276,6 +301,38 @@ export function CinematicHome() {
     return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const nodes = chapterRefs.current;
+      const mid = window.scrollY + window.innerHeight / 2;
+      let f = 0;
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        if (!n) continue;
+        const top = n.getBoundingClientRect().top + window.scrollY;
+        if (mid >= top) f = i + Math.min((mid - top) / Math.max(n.offsetHeight, 1), 1) - 0.5;
+      }
+      f = Math.min(Math.max(f, 0), BEATS.length - 1);
+      progress.current = f;
+      const m = manual.current;
+      if (m && Math.abs(f - m.at) > 0.35) manual.current = null;
+      openAmount.current = manual.current ? (manual.current.open ? 1 : 0) : openAt(f);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
   // OrbitControls sits on the full-viewport canvas; without this, the wheel never
   // reaches the document and the scroll story cannot play.
   useEffect(() => {
@@ -291,18 +348,24 @@ export function CinematicHome() {
   }, []);
 
   const toggle = () => {
-    setOpen((o) => {
-      if (!o) setBurst((n) => n + 1);
-      return !o;
-    });
+    const isOpenNow = manual.current ? manual.current.open : openAmount.current > 0.5;
+    const next = !isOpenNow;
+    manual.current = { open: next, at: progress.current };
+    openAmount.current = next ? 1 : 0;
+    if (next) setBurst((n) => n + 1);
+    setOpen(next);
   };
+  const glow = FINISHES[finish].glow;
 
   return (
     <>
       <section className="relative">
         <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
           <div className="sticky top-0 h-svh">
-            <div className="absolute top-[8%] right-[-10%] h-[70%] w-[65%] rounded-full bg-[radial-gradient(closest-side,rgba(124,92,230,0.32),rgba(124,92,230,0.08)_55%,transparent)] blur-2xl" />
+            <div
+              className="absolute top-[8%] right-[-10%] h-[70%] w-[65%] rounded-full blur-2xl transition-[background] duration-700"
+              style={{ background: `radial-gradient(closest-side, rgba(${glow},0.32), rgba(${glow},0.08) 55%, transparent)` }}
+            />
             <div className="absolute bottom-[8%] left-[8%] h-[40%] w-[40%] rounded-full bg-[radial-gradient(closest-side,rgba(245,208,97,0.12),transparent)] blur-2xl" />
           </div>
         </div>
@@ -323,13 +386,18 @@ export function CinematicHome() {
                 enableZoom={false}
                 framing={wide ? "right" : "center"}
                 shot={BEATS[index]!.shot}
+                track={reduce ? undefined : { progress, shots: SHOTS }}
+                openRef={reduce ? undefined : openAmount}
+                follow={!reduce}
+                finish={finish}
               />
             </SceneBoundary>
           )}
           <ProgressRail index={index} />
+          {!useStatic && <FinishPicker value={finish} onChange={setFinish} />}
         </div>
 
-        <div className="relative z-10 -mt-[100svh]">
+        <div className="pointer-events-none relative z-10 -mt-[100svh]">
           {BEATS.map((beat, i) => (
             <article
               key={beat.id}
@@ -338,7 +406,8 @@ export function CinematicHome() {
               }}
               data-index={i}
               className={cn(
-                "flex min-h-[100svh] px-6 pt-28 pb-16 sm:px-10 lg:px-14",
+                // Click-through outside the copy card, so the box (tap to open) and the sleeve picker stay reachable.
+                "pointer-events-none flex min-h-[100svh] px-6 pt-28 pb-16 sm:px-10 lg:px-14",
                 beat.shot === "logo" || beat.shot === "zoom" ? "items-start lg:items-center" : "items-center",
               )}
             >
@@ -352,7 +421,13 @@ export function CinematicHome() {
         </div>
       </section>
 
+      <FoilDrip />
+
       <FeatureShowcase />
+
+      <WordSweep />
+
+      <OccasionSwitcher />
 
       <section className="mx-auto max-w-6xl px-4 pt-32 sm:px-6">
         <SectionHeading eyebrow="Smart party calculator" title="How much do we actually need?">
@@ -379,6 +454,8 @@ export function CinematicHome() {
           </p>
         </Glass>
       </section>
+
+      <MomentsCollage />
 
       <section className="mx-auto max-w-4xl px-4 pt-32 text-center sm:px-6">
         <p className="font-sub text-xs font-semibold tracking-[0.28em] text-celebration-gold/80 uppercase">Concierge</p>
