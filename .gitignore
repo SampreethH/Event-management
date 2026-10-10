@@ -1,7 +1,8 @@
 node_modules
 .next
-out
-build
+/out
+# Root build output only — a bare "build" also ignored src/app/build (the /build page).
+/build
 coverage
 *.tsbuildinfo
 next-env.d.ts
