@@ -4,22 +4,23 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, Ban, Leaf, ShieldCheck, Sparkles, Users, Wheat, Zap } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { detectQuality, subscribeNoop } from "@/components/three/capability";
 import { SceneBoundary } from "@/components/three/SceneBoundary";
 import { FINISHES, type SleeveFinish } from "@/components/three/finishes";
 import { FeatureShowcase } from "@/components/landing/FeatureShowcase";
+import { MenuRail } from "@/components/landing/MenuRail";
 import { FinishPicker } from "@/components/landing/FinishPicker";
 import { FoilDrip } from "@/components/landing/FoilDrip";
 import { WordSweep } from "@/components/landing/WordSweep";
 import { OccasionSwitcher } from "@/components/landing/OccasionSwitcher";
 import { MomentsCollage } from "@/components/landing/MomentsCollage";
 import { PartyCalculator } from "@/components/features/PartyCalculator";
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonLink, MagneticLink } from "@/components/ui/Button";
 import { Glass } from "@/components/ui/Glass";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/lib/cn";
+import { scrollByDelta } from "@/lib/client/smooth-scroll";
 
 const MidnightBoxStage = dynamic(() => import("@/components/FestoonExperience").then((m) => m.MidnightBoxStage), {
   ssr: false,
@@ -193,21 +194,22 @@ function BeatCopy({ beat, active }: { beat: Beat; active: boolean }) {
           {(beat.primary || beat.secondary) && (
             <div className="mt-8 flex flex-wrap items-center gap-3">
               {beat.primary && (
-                <Link
+                <MagneticLink
                   href={beat.primary.href}
-                  className="inline-flex h-12 items-center rounded-full btn-luxe px-6 font-sans text-[15px] font-medium text-ivory transition-shadow hover:-translate-y-0.5"
+                  className="inline-flex h-12 items-center rounded-full btn-luxe px-6 font-sans text-[15px] font-medium text-ivory transition-all duration-300 hover:-translate-y-0.5"
                 >
                   {beat.primary.label}
-                </Link>
+                </MagneticLink>
               )}
               {beat.secondary && (
-                <Link
+                <MagneticLink
                   href={beat.secondary.href}
-                  className="inline-flex h-12 items-center gap-2 rounded-full border border-ink/20 bg-ink/[0.04] px-5 font-sans text-[15px] text-lavender-300 backdrop-blur-md transition-colors hover:border-celebration-lavender/50 hover:bg-ink/[0.07]"
+                  strength={0.18}
+                  className="inline-flex h-12 items-center gap-2 rounded-full border border-ink/20 bg-ink/[0.04] px-5 font-sans text-[15px] text-lavender-300 backdrop-blur-md transition-all duration-300 hover:border-celebration-lavender/50 hover:bg-ink/[0.07]"
                 >
                   {beat.id === "arrive" ? <Zap className="size-4 text-celebration-lavender" aria-hidden /> : <Sparkles className="size-4" aria-hidden />}
                   {beat.secondary.label}
-                </Link>
+                </MagneticLink>
               )}
             </div>
           )}
@@ -344,7 +346,8 @@ export function CinematicHome() {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      window.scrollBy(0, e.deltaY);
+      // Lenis never sees this wheel (we stop it here), so hand it the delta to keep the easing.
+      scrollByDelta(e.deltaY);
     };
     el.addEventListener("wheel", onWheel, { passive: false, capture: true });
     return () => el.removeEventListener("wheel", onWheel, { capture: true });
@@ -363,7 +366,7 @@ export function CinematicHome() {
   return (
     <>
       <section className="relative">
-        <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-x-clip" aria-hidden>
           <div className="sticky top-0 h-svh">
             <div
               className="absolute top-[8%] right-[-10%] h-[70%] w-[65%] rounded-full blur-2xl transition-[background] duration-700"
@@ -427,6 +430,8 @@ export function CinematicHome() {
       <FoilDrip />
 
       <FeatureShowcase />
+
+      <MenuRail />
 
       <WordSweep />
 

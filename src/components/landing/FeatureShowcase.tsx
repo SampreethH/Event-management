@@ -5,6 +5,7 @@ import { ArrowUpRight, Boxes, Calculator, Gift, Zap, type LucideIcon } from "luc
 import Link from "next/link";
 import type { MouseEvent } from "react";
 import { cn } from "@/lib/cn";
+import { tilt } from "@/lib/client/pointer-fx";
 
 type BadgeTone = "success" | "lavender" | "gold" | "coral";
 
@@ -65,7 +66,7 @@ const FEATURES: Feature[] = [
     glow: "rgba(138,100,39,0.14)",
     badges: [
       { label: "Personalised", tone: "gold" },
-      { label: "Eco seed-paper", tone: "success" },
+      { label: "Made in Karnataka", tone: "success" },
     ],
   },
 ];
@@ -113,41 +114,49 @@ export function FeatureShowcase() {
       >
         {FEATURES.map((f) => (
           <motion.li key={f.title} variants={card}>
-            <Link
-              href={f.href}
-              onMouseMove={trackPointer}
-              className="glass-panel group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-[0_30px_60px_-30px_rgba(60,42,18,0.28)]"
-              style={{ ["--glow" as string]: f.glow }}
-            >
-              {/* Internal highlights: top specular line + cursor spotlight */}
-              <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-ink/40 to-transparent" aria-hidden />
-              <span
-                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{ background: "radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), var(--glow), transparent 70%)" }}
-                aria-hidden
-              />
-
-              <div className="relative flex items-start justify-between">
-                <span className={cn("grid size-12 place-items-center rounded-2xl ring-1 ring-ink/10 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3", f.accent)}>
-                  <f.Icon className="size-6" strokeWidth={1.75} />
-                </span>
-                <ArrowUpRight className="size-5 text-mist-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-mist" />
-              </div>
-
-              <h3 className="relative mt-8 font-display text-xl font-semibold">{f.title}</h3>
-              <p className="relative mt-2 flex-1 text-sm leading-relaxed text-mist-muted">{f.body}</p>
-
-              <ul className="relative mt-5 flex flex-wrap gap-1.5">
-                {f.badges.map((b) => (
-                  <li key={b.label} className={cn("rounded-full px-2.5 py-1 font-sub text-[10px] font-semibold tracking-wide uppercase ring-1", BADGE[b.tone])}>
-                    {b.label}
-                  </li>
-                ))}
-              </ul>
-            </Link>
+            <FeatureCard f={f} />
           </motion.li>
         ))}
       </motion.ul>
     </section>
+  );
+}
+
+/** A feature tile that tilts toward the cursor, with a spotlight following it inside. */
+function FeatureCard({ f }: { f: Feature }) {
+  return (
+    <Link
+      href={f.href}
+      onMouseMove={trackPointer}
+      {...tilt(7)}
+      className="glass-panel group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 transition-all duration-300 will-change-transform hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-[0_30px_60px_-30px_rgba(60,42,18,0.28)]"
+      style={{ ["--glow" as string]: f.glow }}
+    >
+      {/* Internal highlights: top specular line + cursor spotlight */}
+      <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-ink/40 to-transparent" aria-hidden />
+      <span
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: "radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), var(--glow), transparent 70%)" }}
+        aria-hidden
+      />
+
+      <div className="relative flex items-start justify-between">
+        <span className={cn("grid size-12 place-items-center rounded-2xl ring-1 ring-ink/10 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3", f.accent)}>
+          <f.Icon className="size-6" strokeWidth={1.75} />
+        </span>
+        <ArrowUpRight className="size-5 text-mist-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-mist" />
+      </div>
+
+      <h3 className="relative mt-8 font-display text-xl font-semibold">{f.title}</h3>
+      <p className="relative mt-2 flex-1 text-sm leading-relaxed text-mist-muted">{f.body}</p>
+
+      <ul className="relative mt-5 flex flex-wrap gap-1.5">
+        {f.badges.map((b) => (
+          <li key={b.label} className={cn("rounded-full px-2.5 py-1 font-sub text-[10px] font-semibold tracking-wide uppercase ring-1", BADGE[b.tone])}>
+            {b.label}
+          </li>
+        ))}
+      </ul>
+    </Link>
   );
 }

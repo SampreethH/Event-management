@@ -4,10 +4,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnnouncementTicker } from "@/components/landing/AnnouncementTicker";
 import { useHydrated } from "@/lib/client/use-hydrated";
 import { cn } from "@/lib/cn";
+import { lockScroll } from "@/lib/client/smooth-scroll";
 import { useCart } from "@/stores/cart";
 
 const LINKS = [
@@ -28,6 +29,18 @@ export function Navbar() {
   const hydrated = useHydrated();
   const count = useCart((s) => s.lines.reduce((n, l) => n + l.quantity, 0));
   const shown = hydrated ? count : 0;
+
+  // The open mobile menu closes on Esc and holds the page still underneath.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    lockScroll(true);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      lockScroll(false);
+    };
+  }, [open]);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -98,6 +111,7 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               className="glass-panel mx-auto mt-2 max-w-6xl space-y-1 rounded-3xl p-3 lg:hidden"
+              data-lenis-prevent
             >
               {LINKS.map((l) => (
                 <li key={l.href}>

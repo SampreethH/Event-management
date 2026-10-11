@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/cn";
+import { magnetic } from "@/lib/client/pointer-fx";
 
 type Variant = "gold" | "coral" | "glass" | "ghost";
 type Size = "sm" | "md" | "lg";
@@ -28,10 +31,18 @@ export function buttonClass(variant: Variant = "gold", size: Size = "md", classN
   );
 }
 
-export function Button({ variant, size, className, ...rest }: ComponentProps<"button"> & { variant?: Variant; size?: Size }) {
-  return <button type="button" className={buttonClass(variant, size, className)} {...rest} />;
+/** House CTAs lean toward the cursor; quieter variants stay put. */
+const MAGNETIC: Record<Variant, number> = { gold: 0.28, coral: 0.2, glass: 0, ghost: 0 };
+
+export function Button({ variant = "gold", size, className, ...rest }: ComponentProps<"button"> & { variant?: Variant; size?: Size }) {
+  return <button type="button" className={buttonClass(variant, size, className)} {...magnetic(MAGNETIC[variant])} {...rest} />;
 }
 
-export function ButtonLink({ variant, size, className, ...rest }: ComponentProps<typeof Link> & { variant?: Variant; size?: Size }) {
-  return <Link className={buttonClass(variant, size, className)} {...rest} />;
+export function ButtonLink({ variant = "gold", size, className, ...rest }: ComponentProps<typeof Link> & { variant?: Variant; size?: Size }) {
+  return <Link className={buttonClass(variant, size, className)} {...magnetic(MAGNETIC[variant])} {...rest} />;
+}
+
+/** A plain Link with the magnetic pull, for hand-styled CTAs. */
+export function MagneticLink({ strength = 0.28, ...rest }: ComponentProps<typeof Link> & { strength?: number }) {
+  return <Link {...magnetic(strength)} {...rest} />;
 }

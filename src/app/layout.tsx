@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { ConciergeDock } from "@/components/layout/ConciergeDock";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ChromeGate } from "@/components/layout/ChromeGate";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { Navbar } from "@/components/Navbar";
 import "./globals.css";
 
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${clash.variable} ${serif.variable} ${satoshi.variable} ${sub.variable} ${mono.variable}`}>
       <body className="font-sans antialiased">
+        <SmoothScroll />
         <div className="ambient-stage" aria-hidden />
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-ivory">
           Skip to content
