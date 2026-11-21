@@ -5,18 +5,17 @@ import Image from "next/image";
 
 /**
  * Scattered polaroids that drop onto the table as the section enters view.
- * Stock photos (Unsplash licence) stand in until real Festoon event photos replace them —
- * swap the files in /public/media/moments and the captions below.
+ * Real SKR Events photos — swap the files in /public/media/moments and the captions below to update.
  */
 const MOMENTS: { src: string; alt: string; caption: string; rotate: number; x: string; y: string; w: string }[] = [
-  { src: "/media/moments/m1-balloon-arch.webp", alt: "Pink balloon arch around a cake table", caption: "Blush balloon arch", rotate: -7, x: "2%", y: "6%", w: "24%" },
-  { src: "/media/moments/m3-toast.webp", alt: "Friends raising glasses under balloons", caption: "Raise a glass", rotate: 5, x: "24%", y: "0%", w: "19%" },
-  { src: "/media/moments/m4-marquee-15.webp", alt: "Light-up number 15 with pastel balloons", caption: "Fifteen, in lights", rotate: -3, x: "44%", y: "9%", w: "23%" },
-  { src: "/media/moments/m7-gold-candles.webp", alt: "Gold confetti balloons and candles in a dark room", caption: "Candle-lit evening", rotate: 8, x: "70%", y: "2%", w: "25%" },
-  { src: "/media/moments/m2-cake-candles.webp", alt: "Friends in party hats around a birthday cake", caption: "Make a wish", rotate: 4, x: "6%", y: "48%", w: "25%" },
-  { src: "/media/moments/m6-baby-letters.webp", alt: "BABY marquee letters with pastel balloons", caption: "Baby on the way", rotate: -6, x: "33%", y: "52%", w: "22%" },
-  { src: "/media/moments/m9-dessert-table.webp", alt: "White dessert table with a tiered cake", caption: "The dessert table", rotate: 6, x: "54%", y: "47%", w: "22%" },
-  { src: "/media/moments/m8-party-favors.webp", alt: "Friends blowing party horns in confetti", caption: "Confetti o'clock", rotate: -4, x: "75%", y: "53%", w: "21%" },
+  { src: "/media/moments/m1-butterfly-balloons.webp", alt: "Lilac balloon décor with a light-up 10 and butterflies", caption: "Butterflies & balloons", rotate: -7, x: "2%", y: "6%", w: "24%" },
+  { src: "/media/moments/m3-neon-backdrop.webp", alt: "Birthday girl in front of a gold sequin wall with a pink butterfly arch", caption: "Under the neon", rotate: 5, x: "24%", y: "0%", w: "19%" },
+  { src: "/media/moments/m4-ganesha-mantapa.webp", alt: "Ganesha idol on a red-and-gold mantapa with floral garlands", caption: "Ganesha mantapa", rotate: -3, x: "44%", y: "9%", w: "23%" },
+  { src: "/media/moments/m5-floating-florals.webp", alt: "Floating flower candles in brass bowls", caption: "Floating florals", rotate: 8, x: "70%", y: "2%", w: "25%" },
+  { src: "/media/moments/m2-pink-drip-cake.webp", alt: "Pink drip birthday cake topped with a gold ice-cream cone", caption: "Make a wish", rotate: 4, x: "6%", y: "48%", w: "25%" },
+  { src: "/media/moments/m6-rainbow-cake.webp", alt: "Two-tier pink rainbow cake against a sunset skyline", caption: "Rainbow layers", rotate: -6, x: "33%", y: "52%", w: "22%" },
+  { src: "/media/moments/m7-dessert-table.webp", alt: "Garden-themed cake surrounded by rows of cupcakes", caption: "The dessert table", rotate: 6, x: "54%", y: "47%", w: "22%" },
+  { src: "/media/moments/m8-sunset-cupcakes.webp", alt: "Pink themed cupcakes lined up on a balcony at sunset", caption: "Cupcakes at sunset", rotate: -4, x: "75%", y: "53%", w: "21%" },
 ];
 
 const table: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.09 } } };

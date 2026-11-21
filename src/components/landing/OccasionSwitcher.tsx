@@ -34,7 +34,7 @@ const OCCASIONS: Occasion[] = [
     sleeveId: "sleeve-coral-pop",
     glow: "255,94,91",
     image: "/media/occasions/birthday.webp",
-    alt: "Pink and white balloon arch around a birthday cake table with a neon sign",
+    alt: "Gold sequin birthday backdrop with balloons, butterflies and KHUSHI marquee letters",
   },
   {
     id: "baby-shower",
@@ -46,7 +46,7 @@ const OCCASIONS: Occasion[] = [
     sleeveId: "sleeve-lavender-haze",
     glow: "167,139,250",
     image: "/media/occasions/baby-shower.webp",
-    alt: "Light-up BABY marquee letters with pastel balloon garlands",
+    alt: "Pink celebration cake with crowns, celebrating a little one's first months",
   },
   {
     id: "corporate",
@@ -58,7 +58,7 @@ const OCCASIONS: Occasion[] = [
     sleeveId: "sleeve-champagne-pleat",
     glow: "245,208,97",
     image: "/media/occasions/corporate.webp",
-    alt: "Colleagues raising wine glasses in a toast",
+    alt: "Custom team cake printed with a group photo and travel toppers",
   },
   {
     id: "housewarming",
@@ -70,7 +70,7 @@ const OCCASIONS: Occasion[] = [
     sleeveId: "sleeve-midnight-foil",
     glow: "16,185,129",
     image: "/media/occasions/housewarming.webp",
-    alt: "Friends sharing drinks around a grazing table scattered with confetti",
+    alt: "Traditional pooja décor with flower rangoli, brass lamps and a decorated wall",
   },
 ];
 

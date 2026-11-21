@@ -24,8 +24,8 @@ export async function deliverOtp(channel: DeliveryChannel, to: string, code: str
       body: JSON.stringify({
         from: e.EMAIL_FROM,
         to,
-        subject: `${code} is your Festoon sign-in code`,
-        text: `Your Festoon code is ${code}. It expires in 5 minutes. If you didn't request it, ignore this email.`,
+        subject: `${code} is your SKR Events sign-in code`,
+        text: `Your SKR Events code is ${code}. It expires in 5 minutes. If you didn't request it, ignore this email.`,
       }),
     });
     if (!res.ok) throw new Error(`Email delivery failed (${res.status})`);
@@ -63,7 +63,7 @@ export async function deliverOtp(channel: DeliveryChannel, to: string, code: str
       Authorization: `Basic ${Buffer.from(`${e.TWILIO_ACCOUNT_SID}:${e.TWILIO_AUTH_TOKEN}`).toString("base64")}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: new URLSearchParams({ To: to, From: e.TWILIO_FROM, Body: `${code} is your Festoon code. Valid for 5 minutes.` }),
+    body: new URLSearchParams({ To: to, From: e.TWILIO_FROM, Body: `${code} is your SKR Events code. Valid for 5 minutes.` }),
   });
   if (!res.ok) throw new Error(`SMS delivery failed (${res.status})`);
 }

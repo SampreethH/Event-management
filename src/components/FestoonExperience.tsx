@@ -156,9 +156,14 @@ const makeWordmark =
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = `600 150px ${display}`;
+    let size = 150;
     ctx.letterSpacing = '6px';
-    ctx.fillText('festoon', w / 2 + 3, h * 0.42);
+    ctx.font = `600 ${size}px ${display}`;
+    while (size > 60 && ctx.measureText('SKR EVENTS').width > w - 140) {
+      size -= 6;
+      ctx.font = `600 ${size}px ${display}`;
+    }
+    ctx.fillText('SKR EVENTS', w / 2 + 3, h * 0.42);
 
     const y = h * 0.64;
     ctx.lineWidth = 2;
@@ -1232,7 +1237,7 @@ export default function FestoonExperience() {
       <header className="fixed inset-x-0 top-4 z-50 mx-auto max-w-6xl px-4">
         <div className="relative flex items-center justify-between rounded-2xl border border-white/10 bg-[#0D0E17]/65 px-6 py-3.5 shadow-2xl backdrop-blur-2xl">
           <Link href="/" className="flex items-center gap-2">
-            <span className="font-serif text-xl font-bold tracking-tight text-white">festoon</span>
+            <span className="font-serif text-xl font-bold tracking-tight text-white">SKR EVENTS</span>
           </Link>
 
           <nav className="hidden items-center gap-1 text-xs font-medium text-slate-400 md:flex" aria-label="Main">

@@ -8,12 +8,12 @@ import { useEffect, useRef, useState } from "react";
  * Scroll-scrubbed footage: the wall gets decorated as you scroll, and rewinds when you scroll back.
  * The clips are encoded with a keyframe every 3 frames so seeking stays smooth. WebM (VP9) is listed
  * first because open-source Chromium builds can't decode H.264; Safari falls through to the MP4.
- * Footage: Pexels video 7119576 (Pexels licence, free for commercial use, no attribution required).
- * Swap /public/media/decor/decorating*.mp4 for a real Festoon setup clip when you have one.
+ * Footage: SKR Events festival décor (Varamahalakshmi setup). Desktop clip is 16:9 with a blurred fill;
+ * the -720 mobile clips are portrait.
  */
 const STEPS = [
-  { at: 0, kicker: "Minute 0", title: "The wall goes up.", body: "Pre-cut, pre-inflated and labelled, hung to the layout you approved." },
-  { at: 0.34, kicker: "Minute 40", title: "Every letter, level.", body: "Tassels, bunting and balloons, nudged until it photographs right." },
+  { at: 0, kicker: "Minute 0", title: "The flowers go down.", body: "Fresh garlands, petals and rangoli, laid out to the design you approved." },
+  { at: 0.34, kicker: "Minute 40", title: "Every detail, dressed.", body: "Backdrops, lamps, drapes and lights, nudged until it photographs right." },
   { at: 0.68, kicker: "Minute 90", title: "Done before the doorbell.", body: "Photo-ready before the first guest arrives. We clear up after." },
 ];
 
@@ -62,7 +62,7 @@ export function DecorScrub() {
     return (
       <section className="relative overflow-hidden rounded-[1.75rem] border border-white/10">
         <div className="relative aspect-video">
-          <Image src="/media/decor/decorating-poster.webp" alt="A couple hanging pastel HAPPY BIRTHDAY balloon letters on a white wall" fill sizes="100vw" className="object-cover" />
+          <Image src="/media/decor/decorating-poster.webp" alt="Festival décor by SKR Events: flower garlands, brass lamps and a decorated wall" fill sizes="100vw" className="object-cover" />
         </div>
         <ol className="grid gap-4 p-6 sm:grid-cols-3">
           {STEPS.map((s) => (

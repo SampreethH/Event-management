@@ -46,7 +46,7 @@ export function useSleeveTexture(color: string, accent: string, label: string): 
     }
 
     // Label plate
-    const text = label.trim() || "Festoon";
+    const text = label.trim() || "SKR EVENTS";
     const font = getComputedStyle(document.documentElement).getPropertyValue("--font-clash") || "sans-serif";
     ctx.fillStyle = "rgba(10,11,16,0.55)";
     ctx.fillRect(0, 88, canvas.width, 80);

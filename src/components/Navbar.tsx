@@ -43,7 +43,7 @@ export function Navbar() {
             onClick={() => setOpen(false)}
             className="mr-auto font-sans text-[1.35rem] font-medium tracking-tight text-mist"
           >
-            fest<span className="text-celebration-gold">oo</span>n
+            SKR <span className="text-celebration-gold">EVENTS</span>
           </Link>
 
           <ul className="hidden items-center gap-1 font-sans text-[15px] lg:flex">

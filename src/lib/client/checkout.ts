@@ -28,7 +28,7 @@ function loadRazorpay(): Promise<void> {
  * Resolves "paid" once Razorpay's signature is verified server-side, or
  * "redirect" when the browser is leaving for Stripe Checkout.
  */
-export async function openCheckout(payment: ClientPayment, brand = "Festoon"): Promise<"paid" | "dismissed" | "redirect"> {
+export async function openCheckout(payment: ClientPayment, brand = "SKR EVENTS"): Promise<"paid" | "dismissed" | "redirect"> {
   if (payment.provider === "STRIPE") {
     window.location.assign(payment.checkoutUrl);
     return "redirect";

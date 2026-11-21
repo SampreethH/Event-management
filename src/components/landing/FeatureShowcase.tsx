@@ -100,7 +100,7 @@ export function FeatureShowcase() {
         transition={{ duration: 0.6 }}
         className="mx-auto max-w-2xl text-center"
       >
-        <p className="font-sub text-xs font-semibold tracking-[0.28em] text-celebration-gold/80 uppercase">Why festoon</p>
+        <p className="font-sub text-xs font-semibold tracking-[0.28em] text-celebration-gold/80 uppercase">Why SKR Events</p>
         <h2 className="mt-3 font-display text-4xl leading-[1.02] font-bold text-balance sm:text-5xl">Everything a party needs, in one cart.</h2>
       </motion.header>
 

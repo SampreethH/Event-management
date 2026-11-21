@@ -7,7 +7,7 @@ export function ConciergeDock() {
   return (
     <div className="fixed right-4 bottom-4 z-40 flex flex-col gap-2 sm:right-6 sm:bottom-6">
       <a
-        href={whatsappUrl(CONCIERGE_WHATSAPP, "Hi Festoon! I'd like help planning a celebration.")}
+        href={whatsappUrl(CONCIERGE_WHATSAPP, "Hi SKR Events! I'd like help planning a celebration.")}
         target="_blank"
         rel="noopener noreferrer"
         className="glass grid size-13 place-items-center rounded-full text-mint-300 transition-transform hover:scale-105"

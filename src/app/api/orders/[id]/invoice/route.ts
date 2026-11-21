@@ -19,7 +19,7 @@ export const GET = handle(async (_req: Request, { params }: { params: Promise<{ 
 <style>body{font:14px/1.5 system-ui;margin:48px;color:#111}table{width:100%;border-collapse:collapse;margin:24px 0}
 td,th{padding:8px;border-bottom:1px solid #ddd;text-align:left}td:nth-child(n+2),th:nth-child(n+2){text-align:right}
 .t{display:flex;justify-content:space-between;max-width:320px;margin-left:auto}</style></head><body>
-<h1>Festoon — Tax invoice</h1><p>Order <b>${esc(order.reference)}</b> · ${order.createdAt.toISOString().slice(0, 10)}</p>
+<h1>SKR EVENTS — Tax invoice</h1><p>Order <b>${esc(order.reference)}</b> · ${order.createdAt.toISOString().slice(0, 10)}</p>
 <table><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Amount</th></tr></thead><tbody>${rows}</tbody></table>
 <div class="t"><span>Subtotal</span><span>${formatPaise(order.subtotalPaise)}</span></div>
 <div class="t"><span>Bulk discount</span><span>−${formatPaise(order.discountPaise)}</span></div>

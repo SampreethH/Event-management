@@ -1,4 +1,4 @@
-# Event-management — Festoon
+# Event-management — SKR EVENTS
 
 Boutique celebration concierge and "Party-in-a-Box" platform: a 3D box builder, 60–90 minute SOS express kits, a party-size calculator, a 3D decor visualizer, group split-pay, OTP/TOTP sign-in, and an ops portal.
 
@@ -106,10 +106,10 @@ src/app/globals.css        Glass OS utilities: glass, glass-strong, glass-prism,
 
 ## Media credits
 
-Placeholder media is free for commercial use and needs no attribution, but replace it with real Festoon photos and footage before launch:
+All photos and footage are SKR Events' own work:
 
-- `public/media/moments/*`, `public/media/occasions/*`: Unsplash (Unsplash licence).
-- `public/media/decor/*`: Pexels video 7119576 (Pexels licence).
+- `public/media/moments/*`, `public/media/occasions/*`: SKR Events event photos.
+- `public/media/decor/*`: SKR Events festival décor clip.
 
 To re-encode a replacement decor clip:
 

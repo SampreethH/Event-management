@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Decor visualizer", description: "Pre
 
 export default function DecorPage() {
   return (
-    <PageShell eyebrow="Decor by Festoon" title="From bare wall to party-ready." intro="Scroll to watch a room come together, then stage our kits in a true-to-scale room before your decorator arrives.">
+    <PageShell eyebrow="Decor by SKR Events" title="From bare wall to party-ready." intro="Scroll to watch a room come together, then stage our kits in a true-to-scale room before your decorator arrives.">
       <DecorScrub />
       <div className="mt-24">
         <SectionHeading eyebrow="3D decor visualizer" title="See it in your living room first.">

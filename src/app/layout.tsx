@@ -33,10 +33,10 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"],
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
-  title: { default: "Festoon — Party-in-a-Box & celebration concierge", template: "%s · Festoon" },
+  title: { default: "SKR EVENTS — Party-in-a-Box & celebration concierge", template: "%s · SKR EVENTS" },
   description: "Design custom snack & favor boxes in 3D, get SOS party kits in 60–90 minutes, and split the bill with your crew.",
-  applicationName: "Festoon",
-  appleWebApp: { capable: true, title: "Festoon", statusBarStyle: "black-translucent" },
+  applicationName: "SKR EVENTS",
+  appleWebApp: { capable: true, title: "SKR EVENTS", statusBarStyle: "black-translucent" },
   formatDetection: { telephone: false },
 };
 
