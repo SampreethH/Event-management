@@ -242,7 +242,7 @@ export async function startPayment(p: {
     amount: p.amount,
     currency: CURRENCY,
     purpose: p.purpose,
-    description: `Festoon ${p.reference} · ${p.purpose}`,
+    description: `SKR Events ${p.reference} · ${p.purpose}`,
     returnPath: p.returnPath,
     idempotencyKey: `${p.idempotencyKey}:${p.purpose}`,
     prefill: p.prefill,

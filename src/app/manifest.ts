@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Festoon — Party-in-a-Box",
-    short_name: "Festoon",
+    name: "SKR EVENTS — Party-in-a-Box",
+    short_name: "SKR EVENTS",
     description: "Design party boxes in 3D, SOS kits in 90 minutes, split the bill with friends.",
     start_url: "/",
     scope: "/",

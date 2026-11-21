@@ -58,7 +58,7 @@ const BEATS: Beat[] = [
     burst: false,
     shot: "logo",
     kicker: "The mark",
-    title: "Turn it. That's Festoon.",
+    title: "Turn it. That's SKR Events.",
     body: "Hot-foil on obsidian board. The name sits on the face like a stamp, not a sticker.",
     hint: "Scroll to lean in",
   },

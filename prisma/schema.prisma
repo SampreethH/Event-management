@@ -1,4 +1,4 @@
-// Festoon — celebration concierge & Party-in-a-Box
+// SKR EVENTS — celebration concierge & Party-in-a-Box
 // Money is stored as integer minor units (paise). PII columns ending in `Enc`
 // hold AES-256-GCM ciphertext; `*Hash` columns are HMAC lookups (see src/lib/crypto.ts).
 // Row Level Security policies live in prisma/sql/rls.sql and are applied after migrate.

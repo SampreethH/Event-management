@@ -70,7 +70,7 @@ export function verifyTotp(secret: string, code: string, at = Date.now()): boole
   return ok;
 }
 
-export function otpauthUri(secret: string, account: string, issuer = "Festoon"): string {
+export function otpauthUri(secret: string, account: string, issuer = "SKR EVENTS"): string {
   const label = encodeURIComponent(`${issuer}:${account}`);
   const params = new URLSearchParams({ secret, issuer, algorithm: "SHA1", digits: String(DIGITS), period: String(STEP_SECONDS) });
   return `otpauth://totp/${label}?${params.toString()}`;
